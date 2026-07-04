@@ -16,7 +16,9 @@ def test_lexical_ranking_and_precision():
         Card("a", "skill", "CSV deduper", "removes duplicate rows from csv"),
         Card("b", "skill", "PDF reader", "extract text from pdf files"),
     ]
-    assert [c.name for c, _ in lexical_search("deduplicate csv", cards)] == ["CSV deduper"]
+    assert [c.name for c, _ in lexical_search("deduplicate csv", cards)] == [
+        "CSV deduper"
+    ]
     assert lexical_search("", cards) == []  # empty query -> nothing
     assert lexical_search("quantum tunneling", cards) == []  # irrelevant -> nothing
 

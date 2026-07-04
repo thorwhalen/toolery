@@ -46,6 +46,9 @@ docs = [
     "sphinx>=6.0",
     "sphinx-rtd-theme>=1.0",
 ]
+ir = [
+    "ir>=0.1.28",
+]
 
 [tool.ruff]
 line-length = 88

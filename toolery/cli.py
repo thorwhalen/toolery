@@ -6,15 +6,22 @@ Follows the argh SSOT pattern: functions in ``_dispatch_funcs`` become subcomman
 from __future__ import annotations
 
 
-def search(query, source, *, kind="doc", limit=10, pattern="**/*.md"):
+def search(query, source, *, kind="doc", limit=10, pattern="**/*.md", semantic=False):
     """Search a folder corpus of documents (SOURCE) for QUERY, ranked best-first.
 
+    With --semantic, use the ir embedding backend (needs ``pip install 'toolery[ir]'``).
     Example: ``toolery search "dedupe csv" ~/notes``
     """
     from .catalog import catalog
     from .harvest import folder
+    from .search import lexical_search
 
-    cat = catalog(folder(source, kind=kind, pattern=pattern))
+    backend = lexical_search
+    if semantic:
+        from .ir_backend import IrBackend
+
+        backend = IrBackend()
+    cat = catalog(folder(source, kind=kind, pattern=pattern), search_backend=backend)
     hits = cat.search(query, limit=limit)
     if not hits:
         print(f"No matches for {query!r} in {source} ({len(cat)} docs scanned).")

@@ -59,17 +59,23 @@ yields `Card`s — nothing else changes.
 `catalog(...)` and `Catalog(...)` accept a `search_backend` — any callable
 `(query, cards, *, limit) -> [(card, score), ...]`. The default,
 `toolery.lexical_search`, needs no dependencies. A semantic backend built on the
-[`ir`](https://github.com/thorwhalen/ir) retrieval substrate drops into the same seam
-(planned), so you can start lexical and upgrade to embeddings without changing your code.
+[`ir`](https://github.com/thorwhalen/ir) retrieval substrate drops into the same seam,
+so you can start lexical and upgrade to embeddings without changing your calling code.
 
 ```python
-from toolery import Catalog, lexical_search
+from toolery import Catalog, lexical_search, IrBackend
 
-cat = Catalog(cards, search_backend=lexical_search)   # or your own backend
+cat = Catalog(cards, search_backend=lexical_search)   # zero-dependency default
+cat = Catalog(cards, search_backend=IrBackend())      # embeddings — pip install 'toolery[ir]'
 ```
+
+`IrBackend` embeds each card and answers by vector similarity, rebuilding only when the
+cards change. Pass `embedder="light"` for a hermetic, no-download hashing embedder, or the
+default MiniLM for real semantic matching. From the CLI: add `--semantic` to `toolery search`.
 
 ## Status
 
-Early (`0.x`). The lexical core, the `Card`/harvester/catalog model, and the CLI are
-in place; an `ir`-backed semantic backend and more built-in harvesters (agents, MCP
-tools, packages) are next.
+Early (`0.x`). In place: the `Card`/harvester/catalog model, a zero-dependency lexical
+backend, an optional `ir`-backed **semantic** backend (`toolery[ir]`), and the CLI. Next:
+more built-in harvesters (agents, MCP tools, packages) and `ir.discover([...])` federation
+across per-kind corpora.
