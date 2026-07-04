@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>toolery.cli &mdash; toolery 0.0.6 documentation</title>
+  <title>toolery.cli &mdash; toolery 0.0.7 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=1fd71caa"></script>
+      <script src="../../_static/documentation_options.js?v=bbaf98b3"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -167,7 +167,9 @@
 
 <div class="viewcode-block" id="discover">
 <a class="viewcode-back" href="../../module_docs/toolery/cli.html#toolery.cli.discover">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">discover</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">root</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">kinds</span><span class="o">=</span><span class="s2">&quot;skill,agent,doc&quot;</span><span class="p">,</span> <span class="n">embedder</span><span class="o">=</span><span class="s2">&quot;default&quot;</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">discover</span><span class="p">(</span>
+    <span class="n">query</span><span class="p">,</span> <span class="n">root</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">kinds</span><span class="o">=</span><span class="s2">&quot;skill,agent,doc&quot;</span><span class="p">,</span> <span class="n">embedder</span><span class="o">=</span><span class="s2">&quot;default&quot;</span><span class="p">,</span> <span class="n">persist</span><span class="o">=</span><span class="kc">False</span>
+<span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Federated semantic search across multiple asset KINDS under ROOT (needs toolery[ir]).</span>
 
 <span class="sd">    Harvests each of KINDS (comma-separated: skill,agent,doc,package,mcp), builds one ir</span>
@@ -188,7 +190,12 @@
     <span class="n">sources</span> <span class="o">=</span> <span class="p">[</span>
         <span class="n">harvesters</span><span class="p">[</span><span class="n">k</span><span class="o">.</span><span class="n">strip</span><span class="p">()](</span><span class="n">root</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">kinds</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="n">k</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="ow">in</span> <span class="n">harvesters</span>
     <span class="p">]</span>
-    <span class="n">cat</span> <span class="o">=</span> <span class="n">catalog</span><span class="p">(</span><span class="o">*</span><span class="n">sources</span><span class="p">,</span> <span class="n">search_backend</span><span class="o">=</span><span class="n">IrFederatedBackend</span><span class="p">(</span><span class="n">embedder</span><span class="o">=</span><span class="n">embedder</span><span class="p">))</span>
+    <span class="n">cat</span> <span class="o">=</span> <span class="n">catalog</span><span class="p">(</span>
+        <span class="o">*</span><span class="n">sources</span><span class="p">,</span>
+        <span class="n">search_backend</span><span class="o">=</span><span class="n">IrFederatedBackend</span><span class="p">(</span>
+            <span class="n">embedder</span><span class="o">=</span><span class="n">embedder</span><span class="p">,</span> <span class="n">persist</span><span class="o">=</span><span class="n">persist</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;toolery-discover&quot;</span>
+        <span class="p">),</span>
+    <span class="p">)</span>
     <span class="n">hits</span> <span class="o">=</span> <span class="n">cat</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="n">limit</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">hits</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span>
@@ -204,11 +211,12 @@
 
 <div class="viewcode-block" id="mine">
 <a class="viewcode-back" href="../../module_docs/toolery/cli.html#toolery.cli.mine">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">mine</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">semantic</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">mine</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">semantic</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">persist</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Search across YOUR configured ecosystem (~/.config/toolery/sources.toml) for QUERY.</span>
 
 <span class="sd">    Configure sources once (see toolery.contrib.from_config); with --semantic, search via</span>
-<span class="sd">    the ir federated backend (needs ``pip install &#39;toolery[ir]&#39;``).</span>
+<span class="sd">    the ir federated backend (needs ``pip install &#39;toolery[ir]&#39;``); with --persist, reuse</span>
+<span class="sd">    an on-disk index (incremental across runs — warm it first with ``toolery index``).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">.contrib</span><span class="w"> </span><span class="kn">import</span> <span class="n">from_config</span>
 
@@ -216,7 +224,7 @@
     <span class="k">if</span> <span class="n">semantic</span><span class="p">:</span>
         <span class="kn">from</span><span class="w"> </span><span class="nn">.ir_backend</span><span class="w"> </span><span class="kn">import</span> <span class="n">IrFederatedBackend</span>
 
-        <span class="n">backend</span> <span class="o">=</span> <span class="n">IrFederatedBackend</span><span class="p">()</span>
+        <span class="n">backend</span> <span class="o">=</span> <span class="n">IrFederatedBackend</span><span class="p">(</span><span class="n">persist</span><span class="o">=</span><span class="n">persist</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;toolery-mine&quot;</span><span class="p">)</span>
     <span class="n">cat</span> <span class="o">=</span> <span class="n">from_config</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">search_backend</span><span class="o">=</span><span class="n">backend</span><span class="p">)</span>
     <span class="n">hits</span> <span class="o">=</span> <span class="n">cat</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="n">limit</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">hits</span><span class="p">:</span>
@@ -229,7 +237,26 @@
 
 
 
-<span class="n">_dispatch_funcs</span> <span class="o">=</span> <span class="p">[</span><span class="n">search</span><span class="p">,</span> <span class="n">skills</span><span class="p">,</span> <span class="n">agents</span><span class="p">,</span> <span class="n">packages</span><span class="p">,</span> <span class="n">discover</span><span class="p">,</span> <span class="n">mine</span><span class="p">]</span>
+<div class="viewcode-block" id="index">
+<a class="viewcode-back" href="../../module_docs/toolery/cli.html#toolery.cli.index">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">index</span><span class="p">(</span><span class="n">config</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">embedder</span><span class="o">=</span><span class="s2">&quot;default&quot;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Build or refresh the on-disk semantic index for your configured sources.</span>
+
+<span class="sd">    Warms ir&#39;s persistent index (incremental via the ledger) so later ``toolery mine</span>
+<span class="sd">    --semantic --persist`` is fast. Needs ``pip install &#39;toolery[ir]&#39;``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">.contrib</span><span class="w"> </span><span class="kn">import</span> <span class="n">from_config</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">.ir_backend</span><span class="w"> </span><span class="kn">import</span> <span class="n">IrFederatedBackend</span>
+
+    <span class="n">backend</span> <span class="o">=</span> <span class="n">IrFederatedBackend</span><span class="p">(</span><span class="n">embedder</span><span class="o">=</span><span class="n">embedder</span><span class="p">,</span> <span class="n">persist</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;toolery-mine&quot;</span><span class="p">)</span>
+    <span class="n">cat</span> <span class="o">=</span> <span class="n">from_config</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">search_backend</span><span class="o">=</span><span class="n">backend</span><span class="p">)</span>
+    <span class="n">cat</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s2">&quot;warm the index&quot;</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># triggers the incremental per-kind build</span>
+    <span class="n">counts</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">n</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">cat</span><span class="o">.</span><span class="n">kinds</span><span class="o">.</span><span class="n">items</span><span class="p">()))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Indexed </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">cat</span><span class="p">)</span><span class="si">}</span><span class="s2"> assets (</span><span class="si">{</span><span class="n">counts</span><span class="si">}</span><span class="s2">). Persistent index refreshed.&quot;</span><span class="p">)</span></div>
+
+
+
+<span class="n">_dispatch_funcs</span> <span class="o">=</span> <span class="p">[</span><span class="n">search</span><span class="p">,</span> <span class="n">skills</span><span class="p">,</span> <span class="n">agents</span><span class="p">,</span> <span class="n">packages</span><span class="p">,</span> <span class="n">discover</span><span class="p">,</span> <span class="n">mine</span><span class="p">,</span> <span class="n">index</span><span class="p">]</span>
 
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
