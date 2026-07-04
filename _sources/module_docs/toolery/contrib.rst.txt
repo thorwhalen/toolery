@@ -1,0 +1,4 @@
+toolery.contrib
+===============
+.. automodule:: toolery.contrib
+   :members:

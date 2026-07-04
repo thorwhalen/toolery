@@ -1,0 +1,266 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>toolery.contrib &mdash; toolery 0.0.6 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=1fd71caa"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            toolery
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/toolery.html">toolery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/toolery/__main__.html">toolery.__main__</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/toolery/base.html">toolery.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/toolery/catalog.html">toolery.catalog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/toolery/cli.html">toolery.cli</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/toolery/contrib.html">toolery.contrib</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/toolery/harvest.html">toolery.harvest</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/toolery/ir_backend.html">toolery.ir_backend</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/toolery/search.html">toolery.search</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">toolery</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">toolery.contrib</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for toolery.contrib</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Convenience presets: build a catalog over your usual asset locations in one call.</span>
+
+<span class="sd">General for any user — pass roots explicitly, or keep them in a local config file. To pull</span>
+<span class="sd">in a custom source (for example a private skill index), list a ``&quot;module:function&quot;``</span>
+<span class="sd">reference in the config&#39;s ``[harvesters] refs``; toolery imports it lazily. Nothing here</span>
+<span class="sd">hardcodes a personal path, so it stays useful for everyone while you dogfood it on your own</span>
+<span class="sd">ecosystem: your paths live in ``~/.config/toolery/sources.toml`` on your machine, not in code.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">importlib</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">Iterator</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">harvest</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">Card</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.catalog</span><span class="w"> </span><span class="kn">import</span> <span class="n">Catalog</span><span class="p">,</span> <span class="n">catalog</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_existing_roots</span><span class="p">(</span><span class="n">roots</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">home</span><span class="p">,</span> <span class="n">include_home</span><span class="p">,</span> <span class="n">subdir</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Path</span><span class="p">]:</span>
+    <span class="n">candidates</span> <span class="o">=</span> <span class="p">[</span><span class="n">Path</span><span class="p">(</span><span class="n">r</span><span class="p">)</span><span class="o">.</span><span class="n">expanduser</span><span class="p">()</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">roots</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">include_home</span><span class="p">:</span>
+        <span class="n">candidates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">home</span><span class="p">)</span><span class="o">.</span><span class="n">expanduser</span><span class="p">()</span> <span class="o">/</span> <span class="n">subdir</span><span class="p">)</span>
+    <span class="n">seen</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">candidates</span><span class="p">:</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">seen</span> <span class="ow">and</span> <span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+            <span class="n">seen</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+            <span class="k">yield</span> <span class="n">path</span>
+
+
+<div class="viewcode-block" id="claude_skills">
+<a class="viewcode-back" href="../../module_docs/toolery/contrib.html#toolery.contrib.claude_skills">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">claude_skills</span><span class="p">(</span><span class="o">*</span><span class="n">roots</span><span class="p">,</span> <span class="n">home</span><span class="o">=</span><span class="s2">&quot;~&quot;</span><span class="p">,</span> <span class="n">include_home</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Card</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Skill cards from each of ``roots`` and (by default) ``~/.claude``.&quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">root</span> <span class="ow">in</span> <span class="n">_existing_roots</span><span class="p">(</span>
+        <span class="n">roots</span><span class="p">,</span> <span class="n">home</span><span class="o">=</span><span class="n">home</span><span class="p">,</span> <span class="n">include_home</span><span class="o">=</span><span class="n">include_home</span><span class="p">,</span> <span class="n">subdir</span><span class="o">=</span><span class="s2">&quot;.claude&quot;</span>
+    <span class="p">):</span>
+        <span class="k">yield from</span> <span class="n">harvest</span><span class="o">.</span><span class="n">skills</span><span class="p">(</span><span class="n">root</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="claude_agents">
+<a class="viewcode-back" href="../../module_docs/toolery/contrib.html#toolery.contrib.claude_agents">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">claude_agents</span><span class="p">(</span><span class="o">*</span><span class="n">roots</span><span class="p">,</span> <span class="n">home</span><span class="o">=</span><span class="s2">&quot;~&quot;</span><span class="p">,</span> <span class="n">include_home</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Card</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Subagent cards from each of ``roots`` and (by default) ``~/.claude``.&quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">root</span> <span class="ow">in</span> <span class="n">_existing_roots</span><span class="p">(</span>
+        <span class="n">roots</span><span class="p">,</span> <span class="n">home</span><span class="o">=</span><span class="n">home</span><span class="p">,</span> <span class="n">include_home</span><span class="o">=</span><span class="n">include_home</span><span class="p">,</span> <span class="n">subdir</span><span class="o">=</span><span class="s2">&quot;.claude&quot;</span>
+    <span class="p">):</span>
+        <span class="k">yield from</span> <span class="n">harvest</span><span class="o">.</span><span class="n">agents</span><span class="p">(</span><span class="n">root</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="python_packages">
+<a class="viewcode-back" href="../../module_docs/toolery/contrib.html#toolery.contrib.python_packages">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">python_packages</span><span class="p">(</span><span class="o">*</span><span class="n">roots</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Card</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Package cards from each root (a folder containing packages).&quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">root</span> <span class="ow">in</span> <span class="n">roots</span><span class="p">:</span>
+        <span class="k">yield from</span> <span class="n">harvest</span><span class="o">.</span><span class="n">packages</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">root</span><span class="p">)</span><span class="o">.</span><span class="n">expanduser</span><span class="p">())</span></div>
+
+
+
+<div class="viewcode-block" id="everything">
+<a class="viewcode-back" href="../../module_docs/toolery/contrib.html#toolery.contrib.everything">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">everything</span><span class="p">(</span>
+    <span class="o">*</span><span class="p">,</span> <span class="n">home</span><span class="o">=</span><span class="s2">&quot;~&quot;</span><span class="p">,</span> <span class="n">claude_roots</span><span class="o">=</span><span class="p">(),</span> <span class="n">package_roots</span><span class="o">=</span><span class="p">(),</span> <span class="n">search_backend</span><span class="o">=</span><span class="kc">None</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Catalog</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;One catalog over your Claude skills + subagents and your Python packages.</span>
+
+<span class="sd">    ``claude_roots``/``package_roots`` are extra locations to scan; ``~/.claude`` is</span>
+<span class="sd">    always included for Claude assets (pass ``home`` to relocate). Supply a</span>
+<span class="sd">    ``search_backend`` (e.g. ``IrBackend()`` / ``IrFederatedBackend()``) for semantics.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">sources</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Iterable</span><span class="p">[</span><span class="n">Card</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">claude_skills</span><span class="p">(</span><span class="o">*</span><span class="n">claude_roots</span><span class="p">,</span> <span class="n">home</span><span class="o">=</span><span class="n">home</span><span class="p">),</span>
+        <span class="n">claude_agents</span><span class="p">(</span><span class="o">*</span><span class="n">claude_roots</span><span class="p">,</span> <span class="n">home</span><span class="o">=</span><span class="n">home</span><span class="p">),</span>
+    <span class="p">]</span>
+    <span class="n">sources</span> <span class="o">+=</span> <span class="p">[</span><span class="n">python_packages</span><span class="p">(</span><span class="n">root</span><span class="p">)</span> <span class="k">for</span> <span class="n">root</span> <span class="ow">in</span> <span class="n">package_roots</span><span class="p">]</span>
+    <span class="n">kw</span> <span class="o">=</span> <span class="p">{}</span> <span class="k">if</span> <span class="n">search_backend</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">{</span><span class="s2">&quot;search_backend&quot;</span><span class="p">:</span> <span class="n">search_backend</span><span class="p">}</span>
+    <span class="k">return</span> <span class="n">catalog</span><span class="p">(</span><span class="o">*</span><span class="n">sources</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_default_config_path</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
+    <span class="n">base</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;XDG_CONFIG_HOME&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">str</span><span class="p">(</span><span class="n">Path</span><span class="o">.</span><span class="n">home</span><span class="p">()</span> <span class="o">/</span> <span class="s2">&quot;.config&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">Path</span><span class="p">(</span><span class="n">base</span><span class="p">)</span> <span class="o">/</span> <span class="s2">&quot;toolery&quot;</span> <span class="o">/</span> <span class="s2">&quot;sources.toml&quot;</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_cards_from_ref</span><span class="p">(</span><span class="n">ref</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Card</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Import a ``&quot;module:function&quot;`` ref and yield its cards (``Card``s or card dicts).&quot;&quot;&quot;</span>
+    <span class="n">mod_name</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">fn_name</span> <span class="o">=</span> <span class="n">ref</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)</span>
+    <span class="n">fn</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="n">mod_name</span><span class="p">),</span> <span class="n">fn_name</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">fn</span><span class="p">():</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">Card</span><span class="p">):</span>
+            <span class="k">yield</span> <span class="n">item</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="n">ref_path</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;path&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;skill_path&quot;</span><span class="p">)</span>
+            <span class="k">yield</span> <span class="n">Card</span><span class="p">(</span>
+                <span class="nb">id</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span><span class="p">),</span>
+                <span class="n">kind</span><span class="o">=</span><span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;kind&quot;</span><span class="p">,</span> <span class="s2">&quot;custom&quot;</span><span class="p">),</span>
+                <span class="n">name</span><span class="o">=</span><span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span>
+                <span class="n">description</span><span class="o">=</span><span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;description&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span>
+                <span class="n">tags</span><span class="o">=</span><span class="nb">tuple</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;tags&quot;</span><span class="p">,</span> <span class="p">())),</span>
+                <span class="n">source_uri</span><span class="o">=</span><span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;source_uri&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">ref_path</span><span class="p">,</span>
+                <span class="n">content_ref</span><span class="o">=</span><span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;content_ref&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">ref_path</span><span class="p">,</span>
+            <span class="p">)</span>
+
+
+<div class="viewcode-block" id="from_config">
+<a class="viewcode-back" href="../../module_docs/toolery/contrib.html#toolery.contrib.from_config">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">from_config</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">search_backend</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Catalog</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Build a catalog from a TOML config of sources.</span>
+
+<span class="sd">    Schema (every section optional)::</span>
+
+<span class="sd">        [claude]</span>
+<span class="sd">        roots = [&quot;~/.claude&quot;, &quot;~/work/project&quot;]</span>
+<span class="sd">        [packages]</span>
+<span class="sd">        roots = [&quot;~/proj/mine&quot;, &quot;~/proj/theirs&quot;]</span>
+<span class="sd">        [harvesters]</span>
+<span class="sd">        refs = [&quot;mymod:my_cards&quot;]   # &quot;module:function&quot; -&gt; iterable of Card or card dicts</span>
+
+<span class="sd">    Your personal paths live in this file on your machine, not in any committed code.</span>
+<span class="sd">    Reading the config needs Python 3.11+ (``tomllib``).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="o">.</span><span class="n">expanduser</span><span class="p">()</span> <span class="k">if</span> <span class="n">path</span> <span class="k">else</span> <span class="n">_default_config_path</span><span class="p">()</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">path</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
+        <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;No toolery sources config at </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">. &quot;</span>
+            <span class="s2">&quot;Create it — see toolery.contrib.from_config for the schema.&quot;</span>
+        <span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">tomllib</span>
+    <span class="k">except</span> <span class="ne">ModuleNotFoundError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>  <span class="c1"># pragma: no cover - Python 3.10 only</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+            <span class="s2">&quot;from_config needs Python 3.11+ (tomllib) to read the TOML config.&quot;</span>
+        <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
+    <span class="n">cfg</span> <span class="o">=</span> <span class="n">tomllib</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">read_text</span><span class="p">())</span>
+    <span class="n">sources</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Iterable</span><span class="p">[</span><span class="n">Card</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">claude_roots</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;claude&quot;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;roots&quot;</span><span class="p">,</span> <span class="p">[])</span>
+    <span class="k">if</span> <span class="n">claude_roots</span><span class="p">:</span>
+        <span class="n">sources</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">claude_skills</span><span class="p">(</span><span class="o">*</span><span class="n">claude_roots</span><span class="p">,</span> <span class="n">include_home</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
+        <span class="n">sources</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">claude_agents</span><span class="p">(</span><span class="o">*</span><span class="n">claude_roots</span><span class="p">,</span> <span class="n">include_home</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">root</span> <span class="ow">in</span> <span class="n">cfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;packages&quot;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;roots&quot;</span><span class="p">,</span> <span class="p">[]):</span>
+        <span class="n">sources</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">python_packages</span><span class="p">(</span><span class="n">root</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">ref</span> <span class="ow">in</span> <span class="n">cfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;harvesters&quot;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;refs&quot;</span><span class="p">,</span> <span class="p">[]):</span>
+        <span class="n">sources</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_cards_from_ref</span><span class="p">(</span><span class="n">ref</span><span class="p">))</span>
+    <span class="n">kw</span> <span class="o">=</span> <span class="p">{}</span> <span class="k">if</span> <span class="n">search_backend</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">{</span><span class="s2">&quot;search_backend&quot;</span><span class="p">:</span> <span class="n">search_backend</span><span class="p">}</span>
+    <span class="k">return</span> <span class="n">catalog</span><span class="p">(</span><span class="o">*</span><span class="n">sources</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
