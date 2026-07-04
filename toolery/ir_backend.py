@@ -133,6 +133,8 @@ class IrFederatedBackend:
         min_score: federated abstention floor — ``None``, ``"auto"``, or a
             ``{corpus_name: float|"auto"|None}`` mapping (a bare float is invalid here).
         max_k: cap on committed results (defaults to the per-call ``limit``).
+        persist: if True, use ir's file-backed store (incremental across runs via the
+            ledger) instead of the in-memory store.
     """
 
     def __init__(
@@ -143,6 +145,7 @@ class IrFederatedBackend:
         mode: str = "dense",
         min_score=None,
         max_k: int | None = None,
+        persist: bool = False,
     ):
         self._ir = _require_ir()
         self._name = name
@@ -150,6 +153,7 @@ class IrFederatedBackend:
         self._mode = mode
         self._min_score = min_score
         self._max_k = max_k
+        self._persist = persist
         self._corpora = None
         self._fp: str | None = None
         self._by_id: dict[str, Card] = {}
@@ -167,9 +171,8 @@ class IrFederatedBackend:
                 name=f"{self._name}-{kind}",
                 metadata_of=lambda aid, raw, _k=kind: {"kind": _k},
             )
-            corpora.append(
-                ir.build(source, store=ir.CorpusStore.memory(), embedder=self._embedder)
-            )
+            store = None if self._persist else ir.CorpusStore.memory()
+            corpora.append(ir.build(source, store=store, embedder=self._embedder))
         self._corpora = corpora
 
     def __call__(

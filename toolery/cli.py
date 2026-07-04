@@ -69,7 +69,9 @@ def packages(root, query="", *, limit=10):
     _browse(harvest.packages, root, query, limit)
 
 
-def discover(query, root, *, limit=10, kinds="skill,agent,doc", embedder="default"):
+def discover(
+    query, root, *, limit=10, kinds="skill,agent,doc", embedder="default", persist=False
+):
     """Federated semantic search across multiple asset KINDS under ROOT (needs toolery[ir]).
 
     Harvests each of KINDS (comma-separated: skill,agent,doc,package,mcp), builds one ir
@@ -90,7 +92,12 @@ def discover(query, root, *, limit=10, kinds="skill,agent,doc", embedder="defaul
     sources = [
         harvesters[k.strip()](root) for k in kinds.split(",") if k.strip() in harvesters
     ]
-    cat = catalog(*sources, search_backend=IrFederatedBackend(embedder=embedder))
+    cat = catalog(
+        *sources,
+        search_backend=IrFederatedBackend(
+            embedder=embedder, persist=persist, name="toolery-discover"
+        ),
+    )
     hits = cat.search(query, limit=limit)
     if not hits:
         print(
@@ -103,11 +110,12 @@ def discover(query, root, *, limit=10, kinds="skill,agent,doc", embedder="defaul
             print(f"          {card.source_uri}")
 
 
-def mine(query, *, config=None, limit=10, semantic=False):
+def mine(query, *, config=None, limit=10, semantic=False, persist=False):
     """Search across YOUR configured ecosystem (~/.config/toolery/sources.toml) for QUERY.
 
     Configure sources once (see toolery.contrib.from_config); with --semantic, search via
-    the ir federated backend (needs ``pip install 'toolery[ir]'``).
+    the ir federated backend (needs ``pip install 'toolery[ir]'``); with --persist, reuse
+    an on-disk index (incremental across runs — warm it first with ``toolery index``).
     """
     from .contrib import from_config
 
@@ -115,7 +123,7 @@ def mine(query, *, config=None, limit=10, semantic=False):
     if semantic:
         from .ir_backend import IrFederatedBackend
 
-        backend = IrFederatedBackend()
+        backend = IrFederatedBackend(persist=persist, name="toolery-mine")
     cat = from_config(config, search_backend=backend)
     hits = cat.search(query, limit=limit)
     if not hits:
@@ -127,7 +135,23 @@ def mine(query, *, config=None, limit=10, semantic=False):
             print(f"          {card.source_uri}")
 
 
-_dispatch_funcs = [search, skills, agents, packages, discover, mine]
+def index(config=None, *, embedder="default"):
+    """Build or refresh the on-disk semantic index for your configured sources.
+
+    Warms ir's persistent index (incremental via the ledger) so later ``toolery mine
+    --semantic --persist`` is fast. Needs ``pip install 'toolery[ir]'``.
+    """
+    from .contrib import from_config
+    from .ir_backend import IrFederatedBackend
+
+    backend = IrFederatedBackend(embedder=embedder, persist=True, name="toolery-mine")
+    cat = from_config(config, search_backend=backend)
+    cat.search("warm the index", limit=1)  # triggers the incremental per-kind build
+    counts = ", ".join(f"{k}: {n}" for k, n in sorted(cat.kinds.items()))
+    print(f"Indexed {len(cat)} assets ({counts}). Persistent index refreshed.")
+
+
+_dispatch_funcs = [search, skills, agents, packages, discover, mine, index]
 
 
 if __name__ == "__main__":

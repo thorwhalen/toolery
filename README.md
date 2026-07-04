@@ -119,6 +119,14 @@ toolery mine "which of my tools parses pdfs?"              # lexical
 toolery mine "which of my tools parses pdfs?" --semantic   # ir federated (toolery[ir])
 ```
 
+For a large corpus, warm a persistent on-disk index once (incremental via ir's ledger, so
+only changed assets are re-embedded) and reuse it across runs:
+
+```bash
+toolery index                                   # build/refresh the on-disk index
+toolery mine "…" --semantic --persist           # reuse it — fast
+```
+
 Your paths and any private-source `refs` live in that local file — nothing personal is baked
 into the package.
 
@@ -128,4 +136,5 @@ Early (`0.x`). In place: the `Card`/catalog model; harvesters for folders, skill
 agents, packages, and MCP servers; a zero-dependency lexical backend; an optional
 `ir`-backed **semantic** backend (`toolery[ir]`), plus federated multi-kind discovery
 (`IrFederatedBackend` / `toolery discover`); a `contrib` ecosystem preset (`toolery mine`);
-and the CLI. Next: persistent indexing for large corpora and progressive-disclosure loading.
+persistent incremental indexing (`toolery index` / `--persist`); and the CLI. Next:
+progressive-disclosure loading and wiring `toolery` into `opsward` for cross-repo discovery.

@@ -93,3 +93,21 @@ def test_federated_backend_empty_and_single_kind():
         search_backend=IrFederatedBackend(embedder="light", mode="dense"),
     )
     assert solo.search("regex text search", limit=3)
+
+
+def test_persistent_backends(tmp_path, monkeypatch):
+    # ir resolves its store via IR_DATA_DIR first -> redirect it into tmp (hermetic)
+    monkeypatch.setenv("IR_DATA_DIR", str(tmp_path / "ir-data"))
+    single = IrBackend(embedder="light", persist=True, name="toolery-test-single")
+    fed = IrFederatedBackend(
+        embedder="light", mode="dense", persist=True, name="toolery-test-fed"
+    )
+    for backend in (single, fed):
+        cat = Catalog(_multi_kind_cards(), search_backend=backend)
+        assert cat.search("extract text from a pdf", limit=3), type(backend).__name__
+    assert (tmp_path / "ir-data").exists()  # the on-disk index was actually written
+    # a fresh backend with the same name reuses the persisted index
+    again = IrFederatedBackend(
+        embedder="light", mode="dense", persist=True, name="toolery-test-fed"
+    )
+    assert Catalog(_multi_kind_cards(), search_backend=again).search("pdf", limit=1)
