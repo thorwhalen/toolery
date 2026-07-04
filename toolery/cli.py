@@ -69,7 +69,41 @@ def packages(root, query="", *, limit=10):
     _browse(harvest.packages, root, query, limit)
 
 
-_dispatch_funcs = [search, skills, agents, packages]
+def discover(query, root, *, limit=10, kinds="skill,agent,doc", embedder="default"):
+    """Federated semantic search across multiple asset KINDS under ROOT (needs toolery[ir]).
+
+    Harvests each of KINDS (comma-separated: skill,agent,doc,package,mcp), builds one ir
+    corpus per kind, and searches them together with RRF fusion + abstention. Example:
+    ``toolery discover "parse a pdf" ~/proj --kinds skill,doc,package``
+    """
+    from . import harvest
+    from .catalog import catalog
+    from .ir_backend import IrFederatedBackend
+
+    harvesters = {
+        "skill": harvest.skills,
+        "agent": harvest.agents,
+        "doc": harvest.folder,
+        "package": harvest.packages,
+        "mcp": harvest.mcp,
+    }
+    sources = [
+        harvesters[k.strip()](root) for k in kinds.split(",") if k.strip() in harvesters
+    ]
+    cat = catalog(*sources, search_backend=IrFederatedBackend(embedder=embedder))
+    hits = cat.search(query, limit=limit)
+    if not hits:
+        print(
+            f"No confident matches for {query!r} in {root} ({len(cat)} assets scanned)."
+        )
+        return
+    for card, score in hits:
+        print(f"{score:6.3f}  [{card.kind}] {card.name}")
+        if card.source_uri:
+            print(f"          {card.source_uri}")
+
+
+_dispatch_funcs = [search, skills, agents, packages, discover]
 
 
 if __name__ == "__main__":

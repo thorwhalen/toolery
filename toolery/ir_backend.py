@@ -115,3 +115,84 @@ class IrBackend:
             if card is not None and score > self._min_score:
                 results.append((card, score))
         return results
+
+
+class IrFederatedBackend:
+    """Federated semantic backend: one ``ir`` corpus **per card kind**, searched together.
+
+    Delegates to ``ir.discover([...])``, which gates each per-kind corpus on its own
+    (raw-score) abstention floor, fuses across corpora with Reciprocal Rank Fusion, then
+    applies distractor-robust selection — so heterogeneous kinds (skills vs. packages vs.
+    docs), whose similarity scores live on different scales, compare fairly. This is the
+    multi-corpus discovery the catalog is designed around.
+
+    Same drop-in contract as :class:`IrBackend`. Args (keyword-only):
+        name: prefix for the per-kind corpus names.
+        embedder: ``"default"`` (MiniLM) or ``"light"`` (hermetic hashing).
+        mode: ``ir`` mode — ``"dense"`` (warning-free), ``"lexical"``, or ``"hybrid"``.
+        min_score: federated abstention floor — ``None``, ``"auto"``, or a
+            ``{corpus_name: float|"auto"|None}`` mapping (a bare float is invalid here).
+        max_k: cap on committed results (defaults to the per-call ``limit``).
+    """
+
+    def __init__(
+        self,
+        *,
+        name: str = "toolery",
+        embedder: str = "default",
+        mode: str = "dense",
+        min_score=None,
+        max_k: int | None = None,
+    ):
+        self._ir = _require_ir()
+        self._name = name
+        self._embedder = embedder
+        self._mode = mode
+        self._min_score = min_score
+        self._max_k = max_k
+        self._corpora = None
+        self._fp: str | None = None
+        self._by_id: dict[str, Card] = {}
+
+    def _build(self, cards: list[Card]) -> None:
+        ir = self._ir
+        self._by_id = {c.id: c for c in cards}
+        by_kind: dict[str, list[Card]] = {}
+        for card in cards:
+            by_kind.setdefault(card.kind, []).append(card)
+        corpora = []
+        for kind, kind_cards in sorted(by_kind.items()):
+            source = ir.CorpusSource.from_mapping(
+                {c.id: c.text for c in kind_cards},
+                name=f"{self._name}-{kind}",
+                metadata_of=lambda aid, raw, _k=kind: {"kind": _k},
+            )
+            corpora.append(
+                ir.build(source, store=ir.CorpusStore.memory(), embedder=self._embedder)
+            )
+        self._corpora = corpora
+
+    def __call__(
+        self, query: str, cards: Iterable[Card], *, limit: int = 10
+    ) -> list[tuple[Card, float]]:
+        cards = list(cards)
+        if not cards or not query.strip():
+            return []
+        fp = _fingerprint(cards)
+        if fp != self._fp or self._corpora is None:
+            self._build(cards)
+            self._fp = fp
+        result = self._ir.discover(
+            self._corpora,
+            query,
+            k=max(limit, 10),
+            max_k=self._max_k or limit,
+            mode=self._mode,
+            min_score=self._min_score,
+        )
+        out: list[tuple[Card, float]] = []
+        for disclosure in result.results:
+            card = self._by_id.get(disclosure.artifact_id)
+            if card is not None:
+                out.append((card, float(disclosure.score)))
+        return out

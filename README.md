@@ -80,10 +80,22 @@ cat = Catalog(cards, search_backend=IrBackend())      # embeddings — pip insta
 cards change. Pass `embedder="light"` for a hermetic, no-download hashing embedder, or the
 default MiniLM for real semantic matching. From the CLI: add `--semantic` to `toolery search`.
 
+For a **multi-kind** catalog, `IrFederatedBackend` builds one `ir` corpus per kind and searches
+them together via `ir.discover([...])` — per-kind abstention floors + Reciprocal Rank Fusion, so
+skills, packages, and docs (whose similarity scores live on different scales) compare fairly:
+
+```python
+from toolery import Catalog, IrFederatedBackend
+
+cat = Catalog(mixed_kind_cards, search_backend=IrFederatedBackend())
+```
+
+The CLI exposes it as `toolery discover "<query>" <root> --kinds skill,agent,doc,package`.
+
 ## Status
 
 Early (`0.x`). In place: the `Card`/catalog model; harvesters for folders, skills,
 agents, packages, and MCP servers; a zero-dependency lexical backend; an optional
-`ir`-backed **semantic** backend (`toolery[ir]`); and the CLI. Next: `ir.discover([...])`
-federation across per-kind corpora, a `toolery.contrib` ecosystem preset, and persistent
-indexing for large corpora.
+`ir`-backed **semantic** backend (`toolery[ir]`), plus federated multi-kind discovery
+(`IrFederatedBackend` / `toolery discover`); and the CLI. Next: a `toolery.contrib` ecosystem
+preset and persistent indexing for large corpora.

@@ -21,7 +21,7 @@ same seam).
 from .base import Card
 from .catalog import Catalog, catalog
 from .harvest import agents, folder, mcp, packages, skills
-from .ir_backend import IrBackend
+from .ir_backend import IrBackend, IrFederatedBackend
 from .search import SearchBackend, lexical_search
 
 from importlib.metadata import PackageNotFoundError as _PkgNotFound
@@ -44,4 +44,5 @@ __all__ = [
     "lexical_search",
     "SearchBackend",
     "IrBackend",
+    "IrFederatedBackend",
 ]
