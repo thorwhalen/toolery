@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>toolery &mdash; toolery 0.0.3 documentation</title>
+  <title>toolery &mdash; toolery 0.0.4 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -15,7 +15,7 @@
   
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=47de8214"></script>
+      <script src="../_static/documentation_options.js?v=8c5712d9"></script>
       <script src="../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -64,9 +64,12 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#toolery.IrBackend"><code class="docutils literal notranslate"><span class="pre">IrBackend</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#toolery.SearchBackend"><code class="docutils literal notranslate"><span class="pre">SearchBackend</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#toolery.agents"><code class="docutils literal notranslate"><span class="pre">agents()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#toolery.catalog"><code class="docutils literal notranslate"><span class="pre">catalog()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#toolery.folder"><code class="docutils literal notranslate"><span class="pre">folder()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#toolery.lexical_search"><code class="docutils literal notranslate"><span class="pre">lexical_search()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#toolery.mcp"><code class="docutils literal notranslate"><span class="pre">mcp()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#toolery.packages"><code class="docutils literal notranslate"><span class="pre">packages()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#toolery.skills"><code class="docutils literal notranslate"><span class="pre">skills()</span></code></a></li>
 </ul>
 </li>
@@ -224,6 +227,14 @@ persist: if True, use <code class="docutils literal notranslate"><span class="pr
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="toolery.agents">
+<span class="sig-prename descclassname"><span class="pre">toolery.</span></span><span class="sig-name descname"><span class="pre">agents</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">root</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">kind</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'agent'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/toolery/harvest.html#agents"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toolery.agents" title="Link to this definition"></a></dt>
+<dd><p>Harvest Claude Code subagent specs (<code class="docutils literal notranslate"><span class="pre">.claude/agents/*.md</span></code>) under <code class="docutils literal notranslate"><span class="pre">root</span></code>.</p>
+<p>Agent specs declare a YAML-frontmatter <code class="docutils literal notranslate"><span class="pre">name</span></code>; <code class="docutils literal notranslate"><span class="pre">.md</span></code> files without one are
+skipped. Pass a project root (finds <code class="docutils literal notranslate"><span class="pre">**/agents/*.md</span></code>) or an <code class="docutils literal notranslate"><span class="pre">agents</span></code> dir directly.</p>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="toolery.catalog">
 <span class="sig-prename descclassname"><span class="pre">toolery.</span></span><span class="sig-name descname"><span class="pre">catalog</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*sources</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">search_backend</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="toolery/search.html#toolery.search.SearchBackend" title="toolery.search.SearchBackend"><span class="pre">SearchBackend</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">&lt;function</span> <span class="pre">lexical_search&gt;</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="toolery/catalog.html#toolery.catalog.Catalog" title="toolery.catalog.Catalog"><span class="pre">Catalog</span></a></span></span><a class="reference internal" href="../_modules/toolery/catalog.html#catalog"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toolery.catalog" title="Link to this definition"></a></dt>
 <dd><p>Build a <a class="reference internal" href="#toolery.Catalog" title="toolery.Catalog"><code class="xref py py-class docutils literal notranslate"><span class="pre">Catalog</span></code></a> from one or more sources.</p>
@@ -261,6 +272,21 @@ yields nothing rather than noise.</p>
 <span class="go">[(&#39;CSV deduper&#39;, 0.75)]</span>
 </pre></div>
 </div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="toolery.mcp">
+<span class="sig-prename descclassname"><span class="pre">toolery.</span></span><span class="sig-name descname"><span class="pre">mcp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">kind</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mcp'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/toolery/harvest.html#mcp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toolery.mcp" title="Link to this definition"></a></dt>
+<dd><p>Harvest configured MCP servers from an MCP config (<code class="docutils literal notranslate"><span class="pre">.mcp.json</span></code> or similar).</p>
+<p><code class="docutils literal notranslate"><span class="pre">source</span></code> may be the config file itself or a directory containing a <code class="docutils literal notranslate"><span class="pre">.mcp.json</span></code>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="toolery.packages">
+<span class="sig-prename descclassname"><span class="pre">toolery.</span></span><span class="sig-name descname"><span class="pre">packages</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">root</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">kind</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'package'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/toolery/harvest.html#packages"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toolery.packages" title="Link to this definition"></a></dt>
+<dd><p>Harvest Python packages (dirs with a <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code>) under <code class="docutils literal notranslate"><span class="pre">root</span></code>.</p>
+<p>Scans <code class="docutils literal notranslate"><span class="pre">root/pyproject.toml</span></code> and <code class="docutils literal notranslate"><span class="pre">root/*/pyproject.toml</span></code> (the common
+folder-of-packages layout); name/description come from the <code class="docutils literal notranslate"><span class="pre">[project]</span></code> table.</p>
 </dd></dl>
 
 <dl class="py function">
