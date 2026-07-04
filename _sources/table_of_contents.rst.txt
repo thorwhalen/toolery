@@ -8,4 +8,5 @@
    module_docs/toolery/catalog
    module_docs/toolery/cli
    module_docs/toolery/harvest
+   module_docs/toolery/ir_backend
    module_docs/toolery/search

@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>toolery &mdash; toolery 0.0.2 documentation</title>
+  <title>toolery &mdash; toolery 0.0.3 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -15,7 +15,7 @@
   
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=e3a6060d"></script>
+      <script src="../_static/documentation_options.js?v=47de8214"></script>
       <script src="../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -62,6 +62,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#toolery.Catalog.search"><code class="docutils literal notranslate"><span class="pre">Catalog.search()</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#toolery.IrBackend"><code class="docutils literal notranslate"><span class="pre">IrBackend</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#toolery.SearchBackend"><code class="docutils literal notranslate"><span class="pre">SearchBackend</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#toolery.catalog"><code class="docutils literal notranslate"><span class="pre">catalog()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#toolery.folder"><code class="docutils literal notranslate"><span class="pre">folder()</span></code></a></li>
@@ -74,6 +75,7 @@
 <li class="toctree-l1"><a class="reference internal" href="toolery/catalog.html">toolery.catalog</a></li>
 <li class="toctree-l1"><a class="reference internal" href="toolery/cli.html">toolery.cli</a></li>
 <li class="toctree-l1"><a class="reference internal" href="toolery/harvest.html">toolery.harvest</a></li>
+<li class="toctree-l1"><a class="reference internal" href="toolery/ir_backend.html">toolery.ir_backend</a></li>
 <li class="toctree-l1"><a class="reference internal" href="toolery/search.html">toolery.search</a></li>
 </ul>
 
@@ -189,6 +191,30 @@ The full asset (a file, a package, a tool schema) is referenced by
 <dd><p>Ranked <code class="docutils literal notranslate"><span class="pre">(card,</span> <span class="pre">score)</span></code> results for <code class="docutils literal notranslate"><span class="pre">query</span></code> via the search backend.</p>
 </dd></dl>
 
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="toolery.IrBackend">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">toolery.</span></span><span class="sig-name descname"><span class="pre">IrBackend</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'toolery'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">embedder</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'default'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'dense'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">persist</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_score</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/toolery/ir_backend.html#IrBackend"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toolery.IrBackend" title="Link to this definition"></a></dt>
+<dd><p>Semantic search backend delegating to the <code class="docutils literal notranslate"><span class="pre">ir</span></code> retrieval substrate.</p>
+<p>Satisfies the <code class="docutils literal notranslate"><span class="pre">(query,</span> <span class="pre">cards,</span> <span class="pre">*,</span> <span class="pre">limit)</span> <span class="pre">-&gt;</span> <span class="pre">[(card,</span> <span class="pre">score),</span> <span class="pre">...]</span></code> search-backend
+contract, so it is a drop-in for <a class="reference internal" href="#toolery.Catalog" title="toolery.Catalog"><code class="xref py py-class docutils literal notranslate"><span class="pre">toolery.Catalog</span></code></a>’s <code class="docutils literal notranslate"><span class="pre">search_backend</span></code>. The
+<code class="docutils literal notranslate"><span class="pre">ir</span></code> corpus is built lazily on first search and cached, and rebuilt only when the
+cards change. Only hits above <code class="docutils literal notranslate"><span class="pre">min_score</span></code> are returned (precision-favoring).</p>
+<dl>
+<dt>Args (keyword-only):</dt><dd><p>name: corpus name handed to <code class="docutils literal notranslate"><span class="pre">ir</span></code>.
+embedder: <code class="docutils literal notranslate"><span class="pre">&quot;default&quot;</span></code> (MiniLM) for real semantics, <code class="docutils literal notranslate"><span class="pre">&quot;light&quot;</span></code> for a</p>
+<blockquote>
+<div><p>hermetic pure-numpy hashing embedder (no download/network).</p>
+</div></blockquote>
+<p>mode: <code class="docutils literal notranslate"><span class="pre">ir</span></code> retrieval mode — <code class="docutils literal notranslate"><span class="pre">&quot;dense&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;lexical&quot;</span></code>, or <code class="docutils literal notranslate"><span class="pre">&quot;hybrid&quot;</span></code>.
+persist: if True, use <code class="docutils literal notranslate"><span class="pre">ir</span></code>’s file-backed store (incremental across runs)</p>
+<blockquote>
+<div><p>instead of the default in-memory store.</p>
+</div></blockquote>
+<p>min_score: drop hits at or below this similarity (default 0.0).</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py class">
