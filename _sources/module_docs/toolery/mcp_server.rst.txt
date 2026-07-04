@@ -1,0 +1,4 @@
+toolery.mcp_server
+==================
+.. automodule:: toolery.mcp_server
+   :members:

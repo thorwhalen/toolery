@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>toolery &mdash; toolery 0.0.7 documentation</title>
+  <title>toolery &mdash; toolery 0.0.8 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -15,7 +15,7 @@
   
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=bbaf98b3"></script>
+      <script src="../_static/documentation_options.js?v=53b53b71"></script>
       <script src="../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -69,8 +69,10 @@
 <li class="toctree-l2"><a class="reference internal" href="#toolery.catalog"><code class="docutils literal notranslate"><span class="pre">catalog()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#toolery.folder"><code class="docutils literal notranslate"><span class="pre">folder()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#toolery.lexical_search"><code class="docutils literal notranslate"><span class="pre">lexical_search()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#toolery.make_server"><code class="docutils literal notranslate"><span class="pre">make_server()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#toolery.mcp"><code class="docutils literal notranslate"><span class="pre">mcp()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#toolery.packages"><code class="docutils literal notranslate"><span class="pre">packages()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#toolery.search_tool"><code class="docutils literal notranslate"><span class="pre">search_tool()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#toolery.skills"><code class="docutils literal notranslate"><span class="pre">skills()</span></code></a></li>
 </ul>
 </li>
@@ -81,6 +83,7 @@
 <li class="toctree-l1"><a class="reference internal" href="toolery/contrib.html">toolery.contrib</a></li>
 <li class="toctree-l1"><a class="reference internal" href="toolery/harvest.html">toolery.harvest</a></li>
 <li class="toctree-l1"><a class="reference internal" href="toolery/ir_backend.html">toolery.ir_backend</a></li>
+<li class="toctree-l1"><a class="reference internal" href="toolery/mcp_server.html">toolery.mcp_server</a></li>
 <li class="toctree-l1"><a class="reference internal" href="toolery/search.html">toolery.search</a></li>
 </ul>
 
@@ -303,6 +306,12 @@ yields nothing rather than noise.</p>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="toolery.make_server">
+<span class="sig-prename descclassname"><span class="pre">toolery.</span></span><span class="sig-name descname"><span class="pre">make_server</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">catalog</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="toolery/catalog.html#toolery.catalog.Catalog" title="toolery.catalog.Catalog"><span class="pre">Catalog</span></a></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'toolery'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/toolery/mcp_server.html#make_server"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toolery.make_server" title="Link to this definition"></a></dt>
+<dd><p>Build (but don’t run) an MCP server exposing <code class="docutils literal notranslate"><span class="pre">catalog</span></code>’s search as one tool.</p>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="toolery.mcp">
 <span class="sig-prename descclassname"><span class="pre">toolery.</span></span><span class="sig-name descname"><span class="pre">mcp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">kind</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mcp'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/toolery/harvest.html#mcp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toolery.mcp" title="Link to this definition"></a></dt>
 <dd><p>Harvest configured MCP servers from an MCP config (<code class="docutils literal notranslate"><span class="pre">.mcp.json</span></code> or similar).</p>
@@ -315,6 +324,13 @@ yields nothing rather than noise.</p>
 <dd><p>Harvest Python packages (dirs with a <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code>) under <code class="docutils literal notranslate"><span class="pre">root</span></code>.</p>
 <p>Scans <code class="docutils literal notranslate"><span class="pre">root/pyproject.toml</span></code> and <code class="docutils literal notranslate"><span class="pre">root/*/pyproject.toml</span></code> (the common
 folder-of-packages layout); name/description come from the <code class="docutils literal notranslate"><span class="pre">[project]</span></code> table.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="toolery.search_tool">
+<span class="sig-prename descclassname"><span class="pre">toolery.</span></span><span class="sig-name descname"><span class="pre">search_tool</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">catalog</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="toolery/catalog.html#toolery.catalog.Catalog" title="toolery.catalog.Catalog"><span class="pre">Catalog</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/toolery/mcp_server.html#search_tool"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toolery.search_tool" title="Link to this definition"></a></dt>
+<dd><p>Return a <code class="docutils literal notranslate"><span class="pre">search(query,</span> <span class="pre">limit=10)</span></code> function (an MCP-shaped tool) bound to <code class="docutils literal notranslate"><span class="pre">catalog</span></code>.</p>
+<p>Its signature and docstring become the MCP tool schema and description.</p>
 </dd></dl>
 
 <dl class="py function">

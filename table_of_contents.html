@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>&lt;no title&gt; &mdash; toolery 0.0.7 documentation</title>
+  <title>&lt;no title&gt; &mdash; toolery 0.0.8 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
@@ -15,7 +15,7 @@
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=bbaf98b3"></script>
+      <script src="_static/documentation_options.js?v=53b53b71"></script>
       <script src="_static/doctools.js?v=fd6eb6e6"></script>
       <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -55,6 +55,7 @@
 <li class="toctree-l1"><a class="reference internal" href="module_docs/toolery/contrib.html">toolery.contrib</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/toolery/harvest.html">toolery.harvest</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/toolery/ir_backend.html">toolery.ir_backend</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/toolery/mcp_server.html">toolery.mcp_server</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/toolery/search.html">toolery.search</a></li>
 </ul>
 
@@ -95,8 +96,10 @@
 <li class="toctree-l2"><a class="reference internal" href="module_docs/toolery.html#toolery.catalog"><code class="docutils literal notranslate"><span class="pre">catalog()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/toolery.html#toolery.folder"><code class="docutils literal notranslate"><span class="pre">folder()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/toolery.html#toolery.lexical_search"><code class="docutils literal notranslate"><span class="pre">lexical_search()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/toolery.html#toolery.make_server"><code class="docutils literal notranslate"><span class="pre">make_server()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/toolery.html#toolery.mcp"><code class="docutils literal notranslate"><span class="pre">mcp()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/toolery.html#toolery.packages"><code class="docutils literal notranslate"><span class="pre">packages()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/toolery.html#toolery.search_tool"><code class="docutils literal notranslate"><span class="pre">search_tool()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/toolery.html#toolery.skills"><code class="docutils literal notranslate"><span class="pre">skills()</span></code></a></li>
 </ul>
 </li>
@@ -120,6 +123,7 @@
 <li class="toctree-l2"><a class="reference internal" href="module_docs/toolery/cli.html#toolery.cli.mine"><code class="docutils literal notranslate"><span class="pre">mine()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/toolery/cli.html#toolery.cli.packages"><code class="docutils literal notranslate"><span class="pre">packages()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/toolery/cli.html#toolery.cli.search"><code class="docutils literal notranslate"><span class="pre">search()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/toolery/cli.html#toolery.cli.serve"><code class="docutils literal notranslate"><span class="pre">serve()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/toolery/cli.html#toolery.cli.skills"><code class="docutils literal notranslate"><span class="pre">skills()</span></code></a></li>
 </ul>
 </li>
@@ -142,6 +146,12 @@
 <li class="toctree-l1"><a class="reference internal" href="module_docs/toolery/ir_backend.html">toolery.ir_backend</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/toolery/ir_backend.html#toolery.ir_backend.IrBackend"><code class="docutils literal notranslate"><span class="pre">IrBackend</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/toolery/ir_backend.html#toolery.ir_backend.IrFederatedBackend"><code class="docutils literal notranslate"><span class="pre">IrFederatedBackend</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/toolery/mcp_server.html">toolery.mcp_server</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/toolery/mcp_server.html#toolery.mcp_server.make_server"><code class="docutils literal notranslate"><span class="pre">make_server()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/toolery/mcp_server.html#toolery.mcp_server.search_tool"><code class="docutils literal notranslate"><span class="pre">search_tool()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/toolery/mcp_server.html#toolery.mcp_server.serve"><code class="docutils literal notranslate"><span class="pre">serve()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/toolery/search.html">toolery.search</a><ul>

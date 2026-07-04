@@ -10,4 +10,5 @@
    module_docs/toolery/contrib
    module_docs/toolery/harvest
    module_docs/toolery/ir_backend
+   module_docs/toolery/mcp_server
    module_docs/toolery/search
