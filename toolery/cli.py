@@ -103,7 +103,31 @@ def discover(query, root, *, limit=10, kinds="skill,agent,doc", embedder="defaul
             print(f"          {card.source_uri}")
 
 
-_dispatch_funcs = [search, skills, agents, packages, discover]
+def mine(query, *, config=None, limit=10, semantic=False):
+    """Search across YOUR configured ecosystem (~/.config/toolery/sources.toml) for QUERY.
+
+    Configure sources once (see toolery.contrib.from_config); with --semantic, search via
+    the ir federated backend (needs ``pip install 'toolery[ir]'``).
+    """
+    from .contrib import from_config
+
+    backend = None
+    if semantic:
+        from .ir_backend import IrFederatedBackend
+
+        backend = IrFederatedBackend()
+    cat = from_config(config, search_backend=backend)
+    hits = cat.search(query, limit=limit)
+    if not hits:
+        print(f"No matches for {query!r} across your {len(cat)} configured assets.")
+        return
+    for card, score in hits:
+        print(f"{score:6.3f}  [{card.kind}] {card.name}")
+        if card.source_uri:
+            print(f"          {card.source_uri}")
+
+
+_dispatch_funcs = [search, skills, agents, packages, discover, mine]
 
 
 if __name__ == "__main__":

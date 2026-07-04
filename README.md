@@ -92,10 +92,40 @@ cat = Catalog(mixed_kind_cards, search_backend=IrFederatedBackend())
 
 The CLI exposes it as `toolery discover "<query>" <root> --kinds skill,agent,doc,package`.
 
+## Catalog your whole ecosystem
+
+`toolery.contrib` builds a catalog over your usual asset locations in one call:
+
+```python
+from toolery import contrib
+
+cat = contrib.everything(package_roots=["~/proj/mine"])   # + your ~/.claude skills & agents
+cat.search("thing I half-remember writing")
+```
+
+Keep your locations in `~/.config/toolery/sources.toml` and search them all from the CLI:
+
+```toml
+[claude]
+roots = ["~/.claude", "~/work/project"]
+[packages]
+roots = ["~/proj/mine", "~/proj/theirs"]
+[harvesters]
+refs = ["mymod:my_cards"]   # "module:function" -> your own Card/dict source (e.g. a private index)
+```
+
+```bash
+toolery mine "which of my tools parses pdfs?"              # lexical
+toolery mine "which of my tools parses pdfs?" --semantic   # ir federated (toolery[ir])
+```
+
+Your paths and any private-source `refs` live in that local file — nothing personal is baked
+into the package.
+
 ## Status
 
 Early (`0.x`). In place: the `Card`/catalog model; harvesters for folders, skills,
 agents, packages, and MCP servers; a zero-dependency lexical backend; an optional
 `ir`-backed **semantic** backend (`toolery[ir]`), plus federated multi-kind discovery
-(`IrFederatedBackend` / `toolery discover`); and the CLI. Next: a `toolery.contrib` ecosystem
-preset and persistent indexing for large corpora.
+(`IrFederatedBackend` / `toolery discover`); a `contrib` ecosystem preset (`toolery mine`);
+and the CLI. Next: persistent indexing for large corpora and progressive-disclosure loading.

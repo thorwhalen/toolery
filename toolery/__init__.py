@@ -18,6 +18,7 @@ same seam).
 ['csvdedupe']
 """
 
+from . import contrib
 from .base import Card
 from .catalog import Catalog, catalog
 from .harvest import agents, folder, mcp, packages, skills
@@ -45,4 +46,5 @@ __all__ = [
     "SearchBackend",
     "IrBackend",
     "IrFederatedBackend",
+    "contrib",
 ]
