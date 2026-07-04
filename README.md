@@ -130,11 +130,32 @@ toolery mine "…" --semantic --persist           # reuse it — fast
 Your paths and any private-source `refs` live in that local file — nothing personal is baked
 into the package.
 
+## Give an agent one search tool (MCP)
+
+Instead of exposing a schema per asset, serve your whole catalog as a single MCP `search`
+tool (needs `pip install 'toolery[mcp]'`):
+
+```bash
+toolery serve            # stdio MCP server over your ~/.config/toolery/sources.toml
+toolery serve --http     # or Streamable HTTP
+```
+
+Point your agent host's MCP config at that command and the agent gets **one** `search`
+tool over everything — the "one search tool, not fifty schemas" idea, made concrete. In
+Python:
+
+```python
+from toolery import make_server, contrib
+
+make_server(contrib.everything(package_roots=["~/proj"])).run(transport="stdio")
+```
+
 ## Status
 
 Early (`0.x`). In place: the `Card`/catalog model; harvesters for folders, skills,
 agents, packages, and MCP servers; a zero-dependency lexical backend; an optional
 `ir`-backed **semantic** backend (`toolery[ir]`), plus federated multi-kind discovery
 (`IrFederatedBackend` / `toolery discover`); a `contrib` ecosystem preset (`toolery mine`);
-persistent incremental indexing (`toolery index` / `--persist`); and the CLI. Next:
-progressive-disclosure loading and wiring `toolery` into `opsward` for cross-repo discovery.
+persistent incremental indexing (`toolery index` / `--persist`); MCP exposure as a single
+`search` tool (`toolery serve`); and the CLI. Also integrated into `opsward` (`opsward find`).
+Next: progressive-disclosure loading.

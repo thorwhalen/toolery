@@ -151,7 +151,21 @@ def index(config=None, *, embedder="default"):
     print(f"Indexed {len(cat)} assets ({counts}). Persistent index refreshed.")
 
 
-_dispatch_funcs = [search, skills, agents, packages, discover, mine, index]
+def serve(config=None, *, http=False, name="toolery"):
+    """Serve your ecosystem's search as an MCP server exposing a single `search` tool.
+
+    Builds a catalog from ~/.config/toolery/sources.toml (see toolery.contrib.from_config)
+    and serves it over stdio (or --http). Point your agent host's MCP config at this
+    command so the agent gets one search tool over everything. Needs ``toolery[mcp]``.
+    """
+    from .contrib import from_config
+    from .mcp_server import serve as _serve
+
+    cat = from_config(config)
+    _serve(cat, name=name, transport="http" if http else "stdio")
+
+
+_dispatch_funcs = [search, skills, agents, packages, discover, mine, index, serve]
 
 
 if __name__ == "__main__":

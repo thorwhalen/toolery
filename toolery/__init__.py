@@ -23,6 +23,7 @@ from .base import Card
 from .catalog import Catalog, catalog
 from .harvest import agents, folder, mcp, packages, skills
 from .ir_backend import IrBackend, IrFederatedBackend
+from .mcp_server import make_server, search_tool
 from .search import SearchBackend, lexical_search
 
 from importlib.metadata import PackageNotFoundError as _PkgNotFound
@@ -46,5 +47,7 @@ __all__ = [
     "SearchBackend",
     "IrBackend",
     "IrFederatedBackend",
+    "make_server",
+    "search_tool",
     "contrib",
 ]

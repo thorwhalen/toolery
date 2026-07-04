@@ -49,6 +49,9 @@ docs = [
 ir = [
     "ir>=0.1.28",
 ]
+mcp = [
+    "py2mcp>=0.1.7",
+]
 
 [tool.ruff]
 line-length = 88
