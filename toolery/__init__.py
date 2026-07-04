@@ -20,7 +20,7 @@ same seam).
 
 from .base import Card
 from .catalog import Catalog, catalog
-from .harvest import folder, skills
+from .harvest import agents, folder, mcp, packages, skills
 from .ir_backend import IrBackend
 from .search import SearchBackend, lexical_search
 
@@ -38,6 +38,9 @@ __all__ = [
     "catalog",
     "folder",
     "skills",
+    "agents",
+    "packages",
+    "mcp",
     "lexical_search",
     "SearchBackend",
     "IrBackend",

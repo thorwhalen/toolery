@@ -32,21 +32,44 @@ def search(query, source, *, kind="doc", limit=10, pattern="**/*.md", semantic=F
             print(f"          {card.source_uri}")
 
 
-def skills(root, query="", *, limit=10):
-    """List (or, with QUERY, search) Claude Agent Skills (SKILL.md) under ROOT."""
-    from . import harvest
+def _browse(harvester, source, query, limit):
+    """List (or search) whatever ``harvester`` yields from ``source``, one line per card."""
     from .catalog import catalog
 
-    cat = catalog(harvest.skills(root))
+    cat = catalog(harvester(source))
     pairs = (
         [(c, 1.0) for c in cat.cards] if not query else cat.search(query, limit=limit)
     )
+    if not cat:
+        print(f"(nothing harvested from {source})")
+        return
     for card, _score in pairs[:limit]:
         blurb = card.description[:88] + ("…" if len(card.description) > 88 else "")
         print(f"{card.name}  —  {blurb}")
 
 
-_dispatch_funcs = [search, skills]
+def skills(root, query="", *, limit=10):
+    """List (or, with QUERY, search) Claude Agent Skills (SKILL.md) under ROOT."""
+    from . import harvest
+
+    _browse(harvest.skills, root, query, limit)
+
+
+def agents(root, query="", *, limit=10):
+    """List (or search) Claude Code subagent specs (.claude/agents/*.md) under ROOT."""
+    from . import harvest
+
+    _browse(harvest.agents, root, query, limit)
+
+
+def packages(root, query="", *, limit=10):
+    """List (or search) Python packages (dirs with pyproject.toml) under ROOT."""
+    from . import harvest
+
+    _browse(harvest.packages, root, query, limit)
+
+
+_dispatch_funcs = [search, skills, agents, packages]
 
 
 if __name__ == "__main__":

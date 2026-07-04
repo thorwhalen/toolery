@@ -41,13 +41,20 @@ import toolery
 
 cat = toolery.catalog(
     toolery.skills("~/.claude/skills"),     # Claude Agent Skills (SKILL.md)
+    toolery.agents("~/.claude"),            # subagent specs (.claude/agents/*.md)
+    toolery.packages("~/my/projects"),      # Python packages (pyproject.toml)
+    toolery.mcp("~/my/project"),            # configured MCP servers (.mcp.json)
     "~/my/notes",                           # a folder of docs
     [toolery.Card("grep", "tool", "grep", "search text with patterns")],
 )
 cat.search("find text in files")
 cat.by_kind("skill")
-cat.kinds                                   # {'skill': 42, 'doc': 118, 'tool': 1}
+cat.kinds                                   # {'skill': 42, 'agent': 9, 'package': 210, ...}
 ```
+
+Built-in harvesters: `folder`, `skills`, `agents`, `packages`, `mcp` — each just a
+generator of `Card`s, so adding a new asset kind is one small function. The CLI mirrors
+them: `toolery skills|agents|packages <root>` (add `--query` to search).
 
 Everything is projected onto one uniform record, the `Card`
 (`id, kind, name, description, tags, source_uri, content_ref`). Supporting a new
@@ -75,7 +82,8 @@ default MiniLM for real semantic matching. From the CLI: add `--semantic` to `to
 
 ## Status
 
-Early (`0.x`). In place: the `Card`/harvester/catalog model, a zero-dependency lexical
-backend, an optional `ir`-backed **semantic** backend (`toolery[ir]`), and the CLI. Next:
-more built-in harvesters (agents, MCP tools, packages) and `ir.discover([...])` federation
-across per-kind corpora.
+Early (`0.x`). In place: the `Card`/catalog model; harvesters for folders, skills,
+agents, packages, and MCP servers; a zero-dependency lexical backend; an optional
+`ir`-backed **semantic** backend (`toolery[ir]`); and the CLI. Next: `ir.discover([...])`
+federation across per-kind corpora, a `toolery.contrib` ecosystem preset, and persistent
+indexing for large corpora.
