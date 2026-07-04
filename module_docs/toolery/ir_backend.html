@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>toolery.ir_backend &mdash; toolery 0.0.4 documentation</title>
+  <title>toolery.ir_backend &mdash; toolery 0.0.5 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -15,7 +15,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=8c5712d9"></script>
+      <script src="../../_static/documentation_options.js?v=282f96c0"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -57,6 +57,7 @@
 <li class="toctree-l1"><a class="reference internal" href="harvest.html">toolery.harvest</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">toolery.ir_backend</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#toolery.ir_backend.IrBackend"><code class="docutils literal notranslate"><span class="pre">IrBackend</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#toolery.ir_backend.IrFederatedBackend"><code class="docutils literal notranslate"><span class="pre">IrFederatedBackend</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="search.html">toolery.search</a></li>
@@ -123,6 +124,28 @@ persist: if True, use <code class="docutils literal notranslate"><span class="pr
 <div><p>instead of the default in-memory store.</p>
 </div></blockquote>
 <p>min_score: drop hits at or below this similarity (default 0.0).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="toolery.ir_backend.IrFederatedBackend">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">toolery.ir_backend.</span></span><span class="sig-name descname"><span class="pre">IrFederatedBackend</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'toolery'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">embedder</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'default'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'dense'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_score</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/toolery/ir_backend.html#IrFederatedBackend"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toolery.ir_backend.IrFederatedBackend" title="Link to this definition"></a></dt>
+<dd><p>Federated semantic backend: one <code class="docutils literal notranslate"><span class="pre">ir</span></code> corpus <strong>per card kind</strong>, searched together.</p>
+<p>Delegates to <code class="docutils literal notranslate"><span class="pre">ir.discover([...])</span></code>, which gates each per-kind corpus on its own
+(raw-score) abstention floor, fuses across corpora with Reciprocal Rank Fusion, then
+applies distractor-robust selection — so heterogeneous kinds (skills vs. packages vs.
+docs), whose similarity scores live on different scales, compare fairly. This is the
+multi-corpus discovery the catalog is designed around.</p>
+<dl>
+<dt>Same drop-in contract as <a class="reference internal" href="#toolery.ir_backend.IrBackend" title="toolery.ir_backend.IrBackend"><code class="xref py py-class docutils literal notranslate"><span class="pre">IrBackend</span></code></a>. Args (keyword-only):</dt><dd><p>name: prefix for the per-kind corpus names.
+embedder: <code class="docutils literal notranslate"><span class="pre">&quot;default&quot;</span></code> (MiniLM) or <code class="docutils literal notranslate"><span class="pre">&quot;light&quot;</span></code> (hermetic hashing).
+mode: <code class="docutils literal notranslate"><span class="pre">ir</span></code> mode — <code class="docutils literal notranslate"><span class="pre">&quot;dense&quot;</span></code> (warning-free), <code class="docutils literal notranslate"><span class="pre">&quot;lexical&quot;</span></code>, or <code class="docutils literal notranslate"><span class="pre">&quot;hybrid&quot;</span></code>.
+min_score: federated abstention floor — <code class="docutils literal notranslate"><span class="pre">None</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;auto&quot;</span></code>, or a</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">{corpus_name:</span> <span class="pre">float|&quot;auto&quot;|None}</span></code> mapping (a bare float is invalid here).</p>
+</div></blockquote>
+<p>max_k: cap on committed results (defaults to the per-call <code class="docutils literal notranslate"><span class="pre">limit</span></code>).</p>
 </dd>
 </dl>
 </dd></dl>

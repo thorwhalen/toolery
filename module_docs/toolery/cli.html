@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>toolery.cli &mdash; toolery 0.0.4 documentation</title>
+  <title>toolery.cli &mdash; toolery 0.0.5 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -15,7 +15,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=8c5712d9"></script>
+      <script src="../../_static/documentation_options.js?v=282f96c0"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -55,6 +55,7 @@
 <li class="toctree-l1"><a class="reference internal" href="catalog.html">toolery.catalog</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">toolery.cli</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#toolery.cli.agents"><code class="docutils literal notranslate"><span class="pre">agents()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#toolery.cli.discover"><code class="docutils literal notranslate"><span class="pre">discover()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#toolery.cli.packages"><code class="docutils literal notranslate"><span class="pre">packages()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#toolery.cli.search"><code class="docutils literal notranslate"><span class="pre">search()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#toolery.cli.skills"><code class="docutils literal notranslate"><span class="pre">skills()</span></code></a></li>
@@ -97,6 +98,15 @@
 <dt class="sig sig-object py" id="toolery.cli.agents">
 <span class="sig-prename descclassname"><span class="pre">toolery.cli.</span></span><span class="sig-name descname"><span class="pre">agents</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">root</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">query</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/toolery/cli.html#agents"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toolery.cli.agents" title="Link to this definition"></a></dt>
 <dd><p>List (or search) Claude Code subagent specs (.claude/agents/<a href="#id1"><span class="problematic" id="id2">*</span></a>.md) under ROOT.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="toolery.cli.discover">
+<span class="sig-prename descclassname"><span class="pre">toolery.cli.</span></span><span class="sig-name descname"><span class="pre">discover</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">root</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kinds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'skill,agent,doc'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">embedder</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'default'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/toolery/cli.html#discover"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toolery.cli.discover" title="Link to this definition"></a></dt>
+<dd><p>Federated semantic search across multiple asset KINDS under ROOT (needs toolery[ir]).</p>
+<p>Harvests each of KINDS (comma-separated: skill,agent,doc,package,mcp), builds one ir
+corpus per kind, and searches them together with RRF fusion + abstention. Example:
+<code class="docutils literal notranslate"><span class="pre">toolery</span> <span class="pre">discover</span> <span class="pre">&quot;parse</span> <span class="pre">a</span> <span class="pre">pdf&quot;</span> <span class="pre">~/proj</span> <span class="pre">--kinds</span> <span class="pre">skill,doc,package</span></code></p>
 </dd></dl>
 
 <dl class="py function">
