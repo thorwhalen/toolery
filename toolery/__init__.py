@@ -23,7 +23,13 @@ from .catalog import Catalog, catalog
 from .harvest import folder, skills
 from .search import SearchBackend, lexical_search
 
-__version__ = "0.0.1"
+from importlib.metadata import PackageNotFoundError as _PkgNotFound
+from importlib.metadata import version as _pkg_version
+
+try:
+    __version__ = _pkg_version("toolery")
+except _PkgNotFound:  # running from a source tree that isn't installed
+    __version__ = "0.0.0"
 
 __all__ = [
     "Card",
