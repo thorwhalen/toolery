@@ -1,0 +1,4 @@
+toolery.cli
+===========
+.. automodule:: toolery.cli
+   :members:

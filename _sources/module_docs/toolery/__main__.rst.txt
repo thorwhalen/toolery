@@ -1,0 +1,4 @@
+toolery.__main__
+================
+.. automodule:: toolery.__main__
+   :members:

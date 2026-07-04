@@ -1,0 +1,11 @@
+.. toctree::
+   :maxdepth: 2
+   :caption: Contents:
+
+   module_docs/toolery
+   module_docs/toolery/__main__
+   module_docs/toolery/base
+   module_docs/toolery/catalog
+   module_docs/toolery/cli
+   module_docs/toolery/harvest
+   module_docs/toolery/search
