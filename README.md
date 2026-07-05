@@ -2,6 +2,13 @@
 
 A searchable, self-maintaining catalog over any corpus of tools, skills, agents, and components.
 
+> **For humans:** you have better things to do than read a README. Point your coding agent at
+> toolery's skill — `gh skill install thorwhalen/toolery toolery` — and say *"catalog my stuff
+> and find me X."* It takes it from there.
+>
+> **For agents, engineers, and control freaks:** welcome, the rest of this README is yours —
+> and there's an [`AGENTS.md`](AGENTS.md) with the canonical brief + module map.
+
 Point `toolery` at a collection of heterogeneous assets — Claude skills, agent specs,
 MCP tools, docs, or packages — and get **one** searchable catalog: ask *"what do I
 already have for X?"* and get a ranked answer, not fifty schemas.
@@ -149,6 +156,20 @@ from toolery import make_server, contrib
 
 make_server(contrib.everything(package_roots=["~/proj"])).run(transport="stdio")
 ```
+
+## Skills (this package is AI-enabled)
+
+toolery ships agent skills — install into any agent host with
+[`gh skill`](https://github.com/github/gh-skill):
+
+```bash
+gh skill install thorwhalen/toolery toolery        # consumer: drive toolery to find your assets
+gh skill install thorwhalen/toolery toolery-dev    # developer: extend & maintain toolery
+```
+
+They also ride along inside the wheel (`toolery/data/skills/`) and mirror to `.claude/skills/`
+for Claude Code. Canonical agent instructions live in [`AGENTS.md`](AGENTS.md) (`CLAUDE.md` is
+a thin shim over it).
 
 ## Status
 
