@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>toolery.base &mdash; toolery 0.0.9 documentation</title>
+  <title>toolery.base &mdash; toolery 0.0.10 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -15,7 +15,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=f7cdbf68"></script>
+      <script src="../../_static/documentation_options.js?v=a83ce22a"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -105,12 +105,12 @@ a research report, a package — is projected onto one uniform record, the
 <p>The card is the <em>cheap</em> unit of discovery: small, uniform, and searchable.
 The full asset (a file, a package, a tool schema) is referenced by
 <code class="docutils literal notranslate"><span class="pre">content_ref</span></code>/<code class="docutils literal notranslate"><span class="pre">source_uri</span></code> and loaded on demand.</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">c</span> <span class="o">=</span> <span class="n">Card</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;skill&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;CSV deduper&#39;</span><span class="p">,</span>
-<span class="gp">... </span>         <span class="n">description</span><span class="o">=</span><span class="s1">&#39;remove duplicate rows from a csv&#39;</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">,))</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">c</span> <span class="o">=</span> <span class="n">Card</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="s1">'x'</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s1">'skill'</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">'CSV deduper'</span><span class="p">,</span>
+<span class="gp">... </span>         <span class="n">description</span><span class="o">=</span><span class="s1">'remove duplicate rows from a csv'</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">(</span><span class="s1">'data'</span><span class="p">,))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">.</span><span class="n">text</span>
-<span class="go">&#39;CSV deduper\nremove duplicate rows from a csv\ndata&#39;</span>
+<span class="go">'CSV deduper\nremove duplicate rows from a csv\ndata'</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">.</span><span class="n">kind</span>
-<span class="go">&#39;skill&#39;</span>
+<span class="go">'skill'</span>
 </pre></div>
 </div>
 <dl class="py property">

@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>toolery &mdash; toolery 0.0.9 documentation</title>
+  <title>toolery &mdash; toolery 0.0.10 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -15,7 +15,7 @@
   
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=f7cdbf68"></script>
+      <script src="../_static/documentation_options.js?v=a83ce22a"></script>
       <script src="../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -123,11 +123,11 @@ the box; a semantic backend built on the <code class="docutils literal notransla
 same seam).</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">toolery</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cat</span> <span class="o">=</span> <span class="n">toolery</span><span class="o">.</span><span class="n">catalog</span><span class="p">([</span>
-<span class="gp">... </span>    <span class="n">toolery</span><span class="o">.</span><span class="n">Card</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;tool&#39;</span><span class="p">,</span> <span class="s1">&#39;csvdedupe&#39;</span><span class="p">,</span> <span class="s1">&#39;remove duplicate rows from a csv&#39;</span><span class="p">),</span>
-<span class="gp">... </span>    <span class="n">toolery</span><span class="o">.</span><span class="n">Card</span><span class="p">(</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;tool&#39;</span><span class="p">,</span> <span class="s1">&#39;pdfread&#39;</span><span class="p">,</span> <span class="s1">&#39;extract text from pdf files&#39;</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="n">toolery</span><span class="o">.</span><span class="n">Card</span><span class="p">(</span><span class="s1">'a'</span><span class="p">,</span> <span class="s1">'tool'</span><span class="p">,</span> <span class="s1">'csvdedupe'</span><span class="p">,</span> <span class="s1">'remove duplicate rows from a csv'</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="n">toolery</span><span class="o">.</span><span class="n">Card</span><span class="p">(</span><span class="s1">'b'</span><span class="p">,</span> <span class="s1">'tool'</span><span class="p">,</span> <span class="s1">'pdfread'</span><span class="p">,</span> <span class="s1">'extract text from pdf files'</span><span class="p">),</span>
 <span class="gp">... </span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="p">[</span><span class="n">c</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">c</span><span class="p">,</span> <span class="n">score</span> <span class="ow">in</span> <span class="n">cat</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s1">&#39;deduplicate csv rows&#39;</span><span class="p">)]</span>
-<span class="go">[&#39;csvdedupe&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">[</span><span class="n">c</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">c</span><span class="p">,</span> <span class="n">score</span> <span class="ow">in</span> <span class="n">cat</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s1">'deduplicate csv rows'</span><span class="p">)]</span>
+<span class="go">['csvdedupe']</span>
 </pre></div>
 </div>
 <dl class="py class">
@@ -137,12 +137,12 @@ same seam).</p>
 <p>The card is the <em>cheap</em> unit of discovery: small, uniform, and searchable.
 The full asset (a file, a package, a tool schema) is referenced by
 <code class="docutils literal notranslate"><span class="pre">content_ref</span></code>/<code class="docutils literal notranslate"><span class="pre">source_uri</span></code> and loaded on demand.</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">c</span> <span class="o">=</span> <span class="n">Card</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;skill&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;CSV deduper&#39;</span><span class="p">,</span>
-<span class="gp">... </span>         <span class="n">description</span><span class="o">=</span><span class="s1">&#39;remove duplicate rows from a csv&#39;</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">,))</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">c</span> <span class="o">=</span> <span class="n">Card</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="s1">'x'</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s1">'skill'</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">'CSV deduper'</span><span class="p">,</span>
+<span class="gp">... </span>         <span class="n">description</span><span class="o">=</span><span class="s1">'remove duplicate rows from a csv'</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">(</span><span class="s1">'data'</span><span class="p">,))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">.</span><span class="n">text</span>
-<span class="go">&#39;CSV deduper\nremove duplicate rows from a csv\ndata&#39;</span>
+<span class="go">'CSV deduper\nremove duplicate rows from a csv\ndata'</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">.</span><span class="n">kind</span>
-<span class="go">&#39;skill&#39;</span>
+<span class="go">'skill'</span>
 </pre></div>
 </div>
 <dl class="py property">
@@ -164,15 +164,15 @@ The full asset (a file, a package, a tool schema) is referenced by
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">toolery.</span></span><span class="sig-name descname"><span class="pre">Catalog</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cards</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="toolery/base.html#toolery.base.Card" title="toolery.base.Card"><span class="pre">Card</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">search_backend</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="toolery/search.html#toolery.search.SearchBackend" title="toolery.search.SearchBackend"><span class="pre">SearchBackend</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">&lt;function</span> <span class="pre">lexical_search&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/toolery/catalog.html#Catalog"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toolery.Catalog" title="Link to this definition"></a></dt>
 <dd><p>A searchable catalog of <a class="reference internal" href="toolery/base.html#toolery.base.Card" title="toolery.base.Card"><code class="xref py py-class docutils literal notranslate"><span class="pre">Card</span></code></a> s.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cat</span> <span class="o">=</span> <span class="n">Catalog</span><span class="p">([</span>
-<span class="gp">... </span>    <span class="n">Card</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;skill&#39;</span><span class="p">,</span> <span class="s1">&#39;CSV deduper&#39;</span><span class="p">,</span> <span class="s1">&#39;removes duplicate rows from csv&#39;</span><span class="p">),</span>
-<span class="gp">... </span>    <span class="n">Card</span><span class="p">(</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;skill&#39;</span><span class="p">,</span> <span class="s1">&#39;PDF reader&#39;</span><span class="p">,</span> <span class="s1">&#39;extract text from pdf files&#39;</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="n">Card</span><span class="p">(</span><span class="s1">'a'</span><span class="p">,</span> <span class="s1">'skill'</span><span class="p">,</span> <span class="s1">'CSV deduper'</span><span class="p">,</span> <span class="s1">'removes duplicate rows from csv'</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="n">Card</span><span class="p">(</span><span class="s1">'b'</span><span class="p">,</span> <span class="s1">'skill'</span><span class="p">,</span> <span class="s1">'PDF reader'</span><span class="p">,</span> <span class="s1">'extract text from pdf files'</span><span class="p">),</span>
 <span class="gp">... </span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">cat</span><span class="p">)</span>
 <span class="go">2</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="p">[</span><span class="n">c</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">c</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">cat</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s1">&#39;deduplicate a csv&#39;</span><span class="p">)]</span>
-<span class="go">[&#39;CSV deduper&#39;]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="p">[</span><span class="n">c</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">cat</span><span class="o">.</span><span class="n">by_kind</span><span class="p">(</span><span class="s1">&#39;skill&#39;</span><span class="p">)]</span>
-<span class="go">[&#39;CSV deduper&#39;, &#39;PDF reader&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">[</span><span class="n">c</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">c</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">cat</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s1">'deduplicate a csv'</span><span class="p">)]</span>
+<span class="go">['CSV deduper']</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">[</span><span class="n">c</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">cat</span><span class="o">.</span><span class="n">by_kind</span><span class="p">(</span><span class="s1">'skill'</span><span class="p">)]</span>
+<span class="go">['CSV deduper', 'PDF reader']</span>
 </pre></div>
 </div>
 <dl class="py method">
@@ -271,9 +271,9 @@ skipped. Pass a project root (finds <code class="docutils literal notranslate"><
 <dd><p>Build a <a class="reference internal" href="#toolery.Catalog" title="toolery.Catalog"><code class="xref py py-class docutils literal notranslate"><span class="pre">Catalog</span></code></a> from one or more sources.</p>
 <p>A <em>source</em> is a folder path (harvested as markdown), a harvester iterable of
 cards (e.g. <a class="reference internal" href="#toolery.skills" title="toolery.skills"><code class="xref py py-func docutils literal notranslate"><span class="pre">toolery.skills()</span></code></a>), or bare <a class="reference internal" href="toolery/base.html#toolery.base.Card" title="toolery.base.Card"><code class="xref py py-class docutils literal notranslate"><span class="pre">Card</span></code></a> s.</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cat</span> <span class="o">=</span> <span class="n">catalog</span><span class="p">([</span><span class="n">Card</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;tool&#39;</span><span class="p">,</span> <span class="s1">&#39;grep&#39;</span><span class="p">,</span> <span class="s1">&#39;search text with patterns&#39;</span><span class="p">)])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">cat</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s1">&#39;pattern search&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">name</span>
-<span class="go">&#39;grep&#39;</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cat</span> <span class="o">=</span> <span class="n">catalog</span><span class="p">([</span><span class="n">Card</span><span class="p">(</span><span class="s1">'x'</span><span class="p">,</span> <span class="s1">'tool'</span><span class="p">,</span> <span class="s1">'grep'</span><span class="p">,</span> <span class="s1">'search text with patterns'</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cat</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s1">'pattern search'</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">name</span>
+<span class="go">'grep'</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -296,11 +296,11 @@ by default via <code class="docutils literal notranslate"><span class="pre">**</
 contains the whole query as a substring — so an empty or irrelevant query
 yields nothing rather than noise.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cards</span> <span class="o">=</span> <span class="p">[</span>
-<span class="gp">... </span>    <span class="n">Card</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;skill&#39;</span><span class="p">,</span> <span class="s1">&#39;CSV deduper&#39;</span><span class="p">,</span> <span class="s1">&#39;removes duplicate rows from csv&#39;</span><span class="p">),</span>
-<span class="gp">... </span>    <span class="n">Card</span><span class="p">(</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;skill&#39;</span><span class="p">,</span> <span class="s1">&#39;PDF reader&#39;</span><span class="p">,</span> <span class="s1">&#39;extract text from pdf files&#39;</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="n">Card</span><span class="p">(</span><span class="s1">'a'</span><span class="p">,</span> <span class="s1">'skill'</span><span class="p">,</span> <span class="s1">'CSV deduper'</span><span class="p">,</span> <span class="s1">'removes duplicate rows from csv'</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="n">Card</span><span class="p">(</span><span class="s1">'b'</span><span class="p">,</span> <span class="s1">'skill'</span><span class="p">,</span> <span class="s1">'PDF reader'</span><span class="p">,</span> <span class="s1">'extract text from pdf files'</span><span class="p">),</span>
 <span class="gp">... </span><span class="p">]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="p">[(</span><span class="n">c</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span> <span class="k">for</span> <span class="n">c</span><span class="p">,</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">lexical_search</span><span class="p">(</span><span class="s1">&#39;dedupe csv&#39;</span><span class="p">,</span> <span class="n">cards</span><span class="p">)]</span>
-<span class="go">[(&#39;CSV deduper&#39;, 0.75)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">[(</span><span class="n">c</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span> <span class="k">for</span> <span class="n">c</span><span class="p">,</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">lexical_search</span><span class="p">(</span><span class="s1">'dedupe csv'</span><span class="p">,</span> <span class="n">cards</span><span class="p">)]</span>
+<span class="go">[('CSV deduper', 0.75)]</span>
 </pre></div>
 </div>
 </dd></dl>

@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>toolery.cli &mdash; toolery 0.0.9 documentation</title>
+  <title>toolery.cli &mdash; toolery 0.0.10 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -15,7 +15,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=f7cdbf68"></script>
+      <script src="../../_static/documentation_options.js?v=a83ce22a"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -57,6 +57,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#toolery.cli.agents"><code class="docutils literal notranslate"><span class="pre">agents()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#toolery.cli.discover"><code class="docutils literal notranslate"><span class="pre">discover()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#toolery.cli.index"><code class="docutils literal notranslate"><span class="pre">index()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#toolery.cli.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#toolery.cli.mine"><code class="docutils literal notranslate"><span class="pre">mine()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#toolery.cli.packages"><code class="docutils literal notranslate"><span class="pre">packages()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#toolery.cli.search"><code class="docutils literal notranslate"><span class="pre">search()</span></code></a></li>
@@ -97,8 +98,8 @@
              
   <section id="module-toolery.cli">
 <span id="toolery-cli"></span><h1>toolery.cli<a class="headerlink" href="#module-toolery.cli" title="Link to this heading"></a></h1>
-<p>Command-line interface for toolery (argh dispatch).</p>
-<p>Follows the argh SSOT pattern: functions in <code class="docutils literal notranslate"><span class="pre">_dispatch_funcs</span></code> become subcommands.</p>
+<p>Command-line interface for toolery (<code class="docutils literal notranslate"><span class="pre">cw</span></code> dispatch).</p>
+<p>Follows the SSOT pattern: functions in <code class="docutils literal notranslate"><span class="pre">_dispatch_funcs</span></code> become subcommands.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="toolery.cli.agents">
 <span class="sig-prename descclassname"><span class="pre">toolery.cli.</span></span><span class="sig-name descname"><span class="pre">agents</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">root</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">query</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/toolery/cli.html#agents"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toolery.cli.agents" title="Link to this definition"></a></dt>
@@ -120,6 +121,14 @@ corpus per kind, and searches them together with RRF fusion + abstention. Exampl
 <dd><p>Build or refresh the on-disk semantic index for your configured sources.</p>
 <p>Warms ir’s persistent index (incremental via the ledger) so later <code class="docutils literal notranslate"><span class="pre">toolery</span> <span class="pre">mine</span>
 <span class="pre">--semantic</span> <span class="pre">--persist</span></code> is fast. Needs <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">'toolery[ir]'</span></code>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="toolery.cli.main">
+<span class="sig-prename descclassname"><span class="pre">toolery.cli.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/toolery/cli.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toolery.cli.main" title="Link to this definition"></a></dt>
+<dd><p>Dispatch the toolery CLI subcommands.</p>
+<p><code class="docutils literal notranslate"><span class="pre">cw.dispatch</span></code> <em>returns</em> the exit code (argh exited by itself), so the
+<code class="docutils literal notranslate"><span class="pre">SystemExit</span></code> here is what makes <code class="docutils literal notranslate"><span class="pre">toolery</span> <span class="pre">no-such-command</span></code> exit 2.</p>
 </dd></dl>
 
 <dl class="py function">

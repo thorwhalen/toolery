@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>toolery.search &mdash; toolery 0.0.9 documentation</title>
+  <title>toolery.search &mdash; toolery 0.0.10 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=f7cdbf68"></script>
+      <script src="../../_static/documentation_options.js?v=a83ce22a"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -83,14 +83,14 @@
            <div itemprop="articleBody">
              
   <h1>Source code for toolery.search</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;Search backends for toolery.</span>
+<span></span><span class="sd">"""Search backends for toolery.</span>
 
 <span class="sd">A *search backend* is any callable ``(query, cards, *, limit) -&gt; [(card, score), ...]``.</span>
 <span class="sd">The default, :func:`lexical_search`, is a zero-dependency token-overlap scorer so</span>
 <span class="sd">that ``toolery`` works out of the box with no models, services, or API keys. A</span>
 <span class="sd">semantic backend built on the ``ir`` retrieval substrate plugs into the same seam</span>
 <span class="sd">(see the ``search_backend`` argument of :class:`toolery.catalog.Catalog`).</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
@@ -100,15 +100,15 @@
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">Card</span>
 
-<span class="n">_WORD</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;[a-z0-9]+&quot;</span><span class="p">)</span>
+<span class="n">_WORD</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">"[a-z0-9]+"</span><span class="p">)</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_tokens</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Lowercase alphanumeric tokens of ``text``.</span>
+<span class="w">    </span><span class="sd">"""Lowercase alphanumeric tokens of ``text``.</span>
 
-<span class="sd">    &gt;&gt;&gt; _tokens(&#39;CSV-deduper, v2!&#39;)</span>
-<span class="sd">    [&#39;csv&#39;, &#39;deduper&#39;, &#39;v2&#39;]</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    &gt;&gt;&gt; _tokens('CSV-deduper, v2!')</span>
+<span class="sd">    ['csv', 'deduper', 'v2']</span>
+<span class="sd">    """</span>
     <span class="k">return</span> <span class="n">_WORD</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">text</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
 
 
@@ -116,7 +116,7 @@
 <a class="viewcode-back" href="../../module_docs/toolery/search.html#toolery.SearchBackend">[docs]</a>
 <span class="nd">@runtime_checkable</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">SearchBackend</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Callable protocol every search backend satisfies.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Callable protocol every search backend satisfies."""</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">cards</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Card</span><span class="p">],</span> <span class="o">*</span><span class="p">,</span> <span class="n">limit</span><span class="p">:</span> <span class="nb">int</span>
@@ -129,19 +129,19 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">lexical_search</span><span class="p">(</span>
     <span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">cards</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Card</span><span class="p">],</span> <span class="o">*</span><span class="p">,</span> <span class="n">limit</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="n">Card</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Rank ``cards`` against ``query`` by token overlap, with name/phrase boosts.</span>
+<span class="w">    </span><span class="sd">"""Rank ``cards`` against ``query`` by token overlap, with name/phrase boosts.</span>
 
 <span class="sd">    Precision-favoring: a card is only returned if it shares a query token or</span>
 <span class="sd">    contains the whole query as a substring — so an empty or irrelevant query</span>
 <span class="sd">    yields nothing rather than noise.</span>
 
 <span class="sd">    &gt;&gt;&gt; cards = [</span>
-<span class="sd">    ...     Card(&#39;a&#39;, &#39;skill&#39;, &#39;CSV deduper&#39;, &#39;removes duplicate rows from csv&#39;),</span>
-<span class="sd">    ...     Card(&#39;b&#39;, &#39;skill&#39;, &#39;PDF reader&#39;, &#39;extract text from pdf files&#39;),</span>
+<span class="sd">    ...     Card('a', 'skill', 'CSV deduper', 'removes duplicate rows from csv'),</span>
+<span class="sd">    ...     Card('b', 'skill', 'PDF reader', 'extract text from pdf files'),</span>
 <span class="sd">    ... ]</span>
-<span class="sd">    &gt;&gt;&gt; [(c.name, round(s, 2)) for c, s in lexical_search(&#39;dedupe csv&#39;, cards)]</span>
-<span class="sd">    [(&#39;CSV deduper&#39;, 0.75)]</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    &gt;&gt;&gt; [(c.name, round(s, 2)) for c, s in lexical_search('dedupe csv', cards)]</span>
+<span class="sd">    [('CSV deduper', 0.75)]</span>
+<span class="sd">    """</span>
     <span class="n">q</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">_tokens</span><span class="p">(</span><span class="n">query</span><span class="p">))</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">q</span><span class="p">:</span>
         <span class="k">return</span> <span class="p">[]</span>

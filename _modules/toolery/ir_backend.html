@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>toolery.ir_backend &mdash; toolery 0.0.9 documentation</title>
+  <title>toolery.ir_backend &mdash; toolery 0.0.10 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=f7cdbf68"></script>
+      <script src="../../_static/documentation_options.js?v=a83ce22a"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -83,14 +83,14 @@
            <div itemprop="articleBody">
              
   <h1>Source code for toolery.ir_backend</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;An ``ir``-backed semantic search backend for toolery.</span>
+<span></span><span class="sd">"""An ``ir``-backed semantic search backend for toolery.</span>
 
-<span class="sd">Optional — requires the ``ir`` package (``pip install &#39;toolery[ir]&#39;``). It embeds each</span>
-<span class="sd">card&#39;s text with ``ir``&#39;s retrieval substrate and answers queries by vector similarity,</span>
-<span class="sd">rebuilding the index only when the catalog&#39;s cards change (content-fingerprinted).</span>
+<span class="sd">Optional — requires the ``ir`` package (``pip install 'toolery[ir]'``). It embeds each</span>
+<span class="sd">card's text with ``ir``'s retrieval substrate and answers queries by vector similarity,</span>
+<span class="sd">rebuilding the index only when the catalog's cards change (content-fingerprinted).</span>
 
 <span class="sd">The default embedder (a MiniLM sentence-transformer) gives real semantic matching;</span>
-<span class="sd">``embedder=&quot;light&quot;`` uses ``ir``&#39;s pure-numpy hashing embedder — no model download, no</span>
+<span class="sd">``embedder="light"`` uses ``ir``'s pure-numpy hashing embedder — no model download, no</span>
 <span class="sd">network — which is what the tests use.</span>
 
 <span class="sd">Drop it into any :class:`toolery.Catalog` in place of the default lexical backend::</span>
@@ -99,8 +99,8 @@
 <span class="sd">    from toolery.ir_backend import IrBackend</span>
 
 <span class="sd">    cat = Catalog(cards, search_backend=IrBackend())        # MiniLM semantics</span>
-<span class="sd">    cat = Catalog(cards, search_backend=IrBackend(embedder=&quot;light&quot;))  # hermetic</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    cat = Catalog(cards, search_backend=IrBackend(embedder="light"))  # hermetic</span>
+<span class="sd">"""</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
@@ -111,54 +111,54 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_require_ir</span><span class="p">():</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Import ``ir`` or raise an actionable error naming the extra to install.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Import ``ir`` or raise an actionable error naming the extra to install."""</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="kn">import</span><span class="w"> </span><span class="nn">ir</span>
     <span class="k">except</span> <span class="ne">ImportError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>  <span class="c1"># pragma: no cover - only hit without ir installed</span>
         <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
-            <span class="s2">&quot;toolery&#39;s semantic backend needs the &#39;ir&#39; package. &quot;</span>
-            <span class="s2">&quot;Install it with:  pip install &#39;toolery[ir]&#39;&quot;</span>
+            <span class="s2">"toolery's semantic backend needs the 'ir' package. "</span>
+            <span class="s2">"Install it with:  pip install 'toolery[ir]'"</span>
         <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
     <span class="k">return</span> <span class="n">ir</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_fingerprint</span><span class="p">(</span><span class="n">cards</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Card</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Order-independent content signature of a card set (id + searchable text).&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Order-independent content signature of a card set (id + searchable text)."""</span>
     <span class="n">digest</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">sha256</span><span class="p">()</span>
     <span class="k">for</span> <span class="n">cid</span><span class="p">,</span> <span class="n">text</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">((</span><span class="n">c</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">c</span><span class="o">.</span><span class="n">text</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">cards</span><span class="p">):</span>
-        <span class="n">digest</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">cid</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">))</span>
-        <span class="n">digest</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x00</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="n">digest</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">text</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">))</span>
-        <span class="n">digest</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x00</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">digest</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">cid</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">"utf-8"</span><span class="p">))</span>
+        <span class="n">digest</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="sa">b</span><span class="s2">"</span><span class="se">\x00</span><span class="s2">"</span><span class="p">)</span>
+        <span class="n">digest</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">text</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">"utf-8"</span><span class="p">))</span>
+        <span class="n">digest</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="sa">b</span><span class="s2">"</span><span class="se">\x00</span><span class="s2">"</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">digest</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
 
 
 <div class="viewcode-block" id="IrBackend">
 <a class="viewcode-back" href="../../module_docs/toolery/ir_backend.html#toolery.IrBackend">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">IrBackend</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Semantic search backend delegating to the ``ir`` retrieval substrate.</span>
+<span class="w">    </span><span class="sd">"""Semantic search backend delegating to the ``ir`` retrieval substrate.</span>
 
 <span class="sd">    Satisfies the ``(query, cards, *, limit) -&gt; [(card, score), ...]`` search-backend</span>
-<span class="sd">    contract, so it is a drop-in for :class:`toolery.Catalog`&#39;s ``search_backend``. The</span>
+<span class="sd">    contract, so it is a drop-in for :class:`toolery.Catalog`'s ``search_backend``. The</span>
 <span class="sd">    ``ir`` corpus is built lazily on first search and cached, and rebuilt only when the</span>
 <span class="sd">    cards change. Only hits above ``min_score`` are returned (precision-favoring).</span>
 
 <span class="sd">    Args (keyword-only):</span>
 <span class="sd">        name: corpus name handed to ``ir``.</span>
-<span class="sd">        embedder: ``&quot;default&quot;`` (MiniLM) for real semantics, ``&quot;light&quot;`` for a</span>
+<span class="sd">        embedder: ``"default"`` (MiniLM) for real semantics, ``"light"`` for a</span>
 <span class="sd">            hermetic pure-numpy hashing embedder (no download/network).</span>
-<span class="sd">        mode: ``ir`` retrieval mode — ``&quot;dense&quot;``, ``&quot;lexical&quot;``, or ``&quot;hybrid&quot;``.</span>
-<span class="sd">        persist: if True, use ``ir``&#39;s file-backed store (incremental across runs)</span>
+<span class="sd">        mode: ``ir`` retrieval mode — ``"dense"``, ``"lexical"``, or ``"hybrid"``.</span>
+<span class="sd">        persist: if True, use ``ir``'s file-backed store (incremental across runs)</span>
 <span class="sd">            instead of the default in-memory store.</span>
 <span class="sd">        min_score: drop hits at or below this similarity (default 0.0).</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="o">*</span><span class="p">,</span>
-        <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;toolery&quot;</span><span class="p">,</span>
-        <span class="n">embedder</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;default&quot;</span><span class="p">,</span>
-        <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;dense&quot;</span><span class="p">,</span>
+        <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"toolery"</span><span class="p">,</span>
+        <span class="n">embedder</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"default"</span><span class="p">,</span>
+        <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"dense"</span><span class="p">,</span>
         <span class="n">persist</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
         <span class="n">min_score</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
     <span class="p">):</span>
@@ -179,7 +179,7 @@
         <span class="n">source</span> <span class="o">=</span> <span class="n">ir</span><span class="o">.</span><span class="n">CorpusSource</span><span class="o">.</span><span class="n">from_mapping</span><span class="p">(</span>
             <span class="p">{</span><span class="n">c</span><span class="o">.</span><span class="n">id</span><span class="p">:</span> <span class="n">c</span><span class="o">.</span><span class="n">text</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">cards</span><span class="p">},</span>
             <span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="p">,</span>
-            <span class="n">metadata_of</span><span class="o">=</span><span class="k">lambda</span> <span class="n">aid</span><span class="p">,</span> <span class="n">raw</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;kind&quot;</span><span class="p">:</span> <span class="n">kinds</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">aid</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)},</span>
+            <span class="n">metadata_of</span><span class="o">=</span><span class="k">lambda</span> <span class="n">aid</span><span class="p">,</span> <span class="n">raw</span><span class="p">:</span> <span class="p">{</span><span class="s2">"kind"</span><span class="p">:</span> <span class="n">kinds</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">aid</span><span class="p">,</span> <span class="s2">""</span><span class="p">)},</span>
         <span class="p">)</span>
         <span class="n">store</span> <span class="o">=</span> <span class="kc">None</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_persist</span> <span class="k">else</span> <span class="n">ir</span><span class="o">.</span><span class="n">CorpusStore</span><span class="o">.</span><span class="n">memory</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_corpus</span> <span class="o">=</span> <span class="n">ir</span><span class="o">.</span><span class="n">build</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">store</span><span class="o">=</span><span class="n">store</span><span class="p">,</span> <span class="n">embedder</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_embedder</span><span class="p">)</span>
@@ -208,7 +208,7 @@
 <div class="viewcode-block" id="IrFederatedBackend">
 <a class="viewcode-back" href="../../module_docs/toolery/ir_backend.html#toolery.IrFederatedBackend">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">IrFederatedBackend</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Federated semantic backend: one ``ir`` corpus **per card kind**, searched together.</span>
+<span class="w">    </span><span class="sd">"""Federated semantic backend: one ``ir`` corpus **per card kind**, searched together.</span>
 
 <span class="sd">    Delegates to ``ir.discover([...])``, which gates each per-kind corpus on its own</span>
 <span class="sd">    (raw-score) abstention floor, fuses across corpora with Reciprocal Rank Fusion, then</span>
@@ -218,21 +218,21 @@
 
 <span class="sd">    Same drop-in contract as :class:`IrBackend`. Args (keyword-only):</span>
 <span class="sd">        name: prefix for the per-kind corpus names.</span>
-<span class="sd">        embedder: ``&quot;default&quot;`` (MiniLM) or ``&quot;light&quot;`` (hermetic hashing).</span>
-<span class="sd">        mode: ``ir`` mode — ``&quot;dense&quot;`` (warning-free), ``&quot;lexical&quot;``, or ``&quot;hybrid&quot;``.</span>
-<span class="sd">        min_score: federated abstention floor — ``None``, ``&quot;auto&quot;``, or a</span>
-<span class="sd">            ``{corpus_name: float|&quot;auto&quot;|None}`` mapping (a bare float is invalid here).</span>
+<span class="sd">        embedder: ``"default"`` (MiniLM) or ``"light"`` (hermetic hashing).</span>
+<span class="sd">        mode: ``ir`` mode — ``"dense"`` (warning-free), ``"lexical"``, or ``"hybrid"``.</span>
+<span class="sd">        min_score: federated abstention floor — ``None``, ``"auto"``, or a</span>
+<span class="sd">            ``{corpus_name: float|"auto"|None}`` mapping (a bare float is invalid here).</span>
 <span class="sd">        max_k: cap on committed results (defaults to the per-call ``limit``).</span>
-<span class="sd">        persist: if True, use ir&#39;s file-backed store (incremental across runs via the</span>
+<span class="sd">        persist: if True, use ir's file-backed store (incremental across runs via the</span>
 <span class="sd">            ledger) instead of the in-memory store.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="o">*</span><span class="p">,</span>
-        <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;toolery&quot;</span><span class="p">,</span>
-        <span class="n">embedder</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;default&quot;</span><span class="p">,</span>
-        <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;dense&quot;</span><span class="p">,</span>
+        <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"toolery"</span><span class="p">,</span>
+        <span class="n">embedder</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"default"</span><span class="p">,</span>
+        <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"dense"</span><span class="p">,</span>
         <span class="n">min_score</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">max_k</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">persist</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
@@ -258,8 +258,8 @@
         <span class="k">for</span> <span class="n">kind</span><span class="p">,</span> <span class="n">kind_cards</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">by_kind</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
             <span class="n">source</span> <span class="o">=</span> <span class="n">ir</span><span class="o">.</span><span class="n">CorpusSource</span><span class="o">.</span><span class="n">from_mapping</span><span class="p">(</span>
                 <span class="p">{</span><span class="n">c</span><span class="o">.</span><span class="n">id</span><span class="p">:</span> <span class="n">c</span><span class="o">.</span><span class="n">text</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">kind_cards</span><span class="p">},</span>
-                <span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">kind</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
-                <span class="n">metadata_of</span><span class="o">=</span><span class="k">lambda</span> <span class="n">aid</span><span class="p">,</span> <span class="n">raw</span><span class="p">,</span> <span class="n">_k</span><span class="o">=</span><span class="n">kind</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;kind&quot;</span><span class="p">:</span> <span class="n">_k</span><span class="p">},</span>
+                <span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">kind</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
+                <span class="n">metadata_of</span><span class="o">=</span><span class="k">lambda</span> <span class="n">aid</span><span class="p">,</span> <span class="n">raw</span><span class="p">,</span> <span class="n">_k</span><span class="o">=</span><span class="n">kind</span><span class="p">:</span> <span class="p">{</span><span class="s2">"kind"</span><span class="p">:</span> <span class="n">_k</span><span class="p">},</span>
             <span class="p">)</span>
             <span class="n">store</span> <span class="o">=</span> <span class="kc">None</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_persist</span> <span class="k">else</span> <span class="n">ir</span><span class="o">.</span><span class="n">CorpusStore</span><span class="o">.</span><span class="n">memory</span><span class="p">()</span>
             <span class="n">corpora</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ir</span><span class="o">.</span><span class="n">build</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">store</span><span class="o">=</span><span class="n">store</span><span class="p">,</span> <span class="n">embedder</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_embedder</span><span class="p">))</span>

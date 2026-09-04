@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>toolery.__main__ &mdash; toolery 0.0.9 documentation</title>
+  <title>toolery.__main__ &mdash; toolery 0.0.10 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -15,7 +15,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=f7cdbf68"></script>
+      <script src="../../_static/documentation_options.js?v=a83ce22a"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -91,10 +91,15 @@
   <section id="module-toolery.__main__">
 <span id="toolery-main"></span><h1>toolery.__main__<a class="headerlink" href="#module-toolery.__main__" title="Link to this heading"></a></h1>
 <p>Entry point for <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">toolery</span></code> and the <code class="docutils literal notranslate"><span class="pre">toolery</span></code> console script.</p>
+<p>The dispatch itself lives in <a class="reference internal" href="cli.html#module-toolery.cli" title="toolery.cli"><code class="xref py py-mod docutils literal notranslate"><span class="pre">toolery.cli</span></code></a>, next to <code class="docutils literal notranslate"><span class="pre">_dispatch_funcs</span></code> (the
+SSOT for what the CLI exposes); this module only re-exports it so the console
+script’s <code class="docutils literal notranslate"><span class="pre">toolery.__main__:main</span></code> target keeps resolving.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="toolery.__main__.main">
-<span class="sig-prename descclassname"><span class="pre">toolery.__main__.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/toolery/__main__.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toolery.__main__.main" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">toolery.__main__.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/toolery/cli.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toolery.__main__.main" title="Link to this definition"></a></dt>
 <dd><p>Dispatch the toolery CLI subcommands.</p>
+<p><code class="docutils literal notranslate"><span class="pre">cw.dispatch</span></code> <em>returns</em> the exit code (argh exited by itself), so the
+<code class="docutils literal notranslate"><span class="pre">SystemExit</span></code> here is what makes <code class="docutils literal notranslate"><span class="pre">toolery</span> <span class="pre">no-such-command</span></code> exit 2.</p>
 </dd></dl>
 
 </section>
