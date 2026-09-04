@@ -13,7 +13,7 @@ optional `ir`-backed semantic + federated search; optional MCP `search` tool for
 ## Install
 
 ```bash
-pip install toolery              # core (lexical; only dep is argh)
+pip install toolery              # core (lexical; only dep is cw)
 pip install 'toolery[ir]'        # + semantic / federated search (the `ir` substrate)
 pip install 'toolery[mcp]'       # + MCP server exposure (py2mcp)
 ```
@@ -52,7 +52,7 @@ just generators of `Card`s, so a new asset kind is one function.
 | `toolery/ir_backend.py` | `IrBackend`, `IrFederatedBackend` (optional — needs `ir`) |
 | `toolery/contrib.py` | ecosystem presets + config-driven `from_config` |
 | `toolery/mcp_server.py` | `search_tool`, `make_server`, `serve` (optional — needs `py2mcp`) |
-| `toolery/cli.py` | argh CLI (`_dispatch_funcs`) |
+| `toolery/cli.py` | `cw` CLI (`_dispatch_funcs`, `main`) |
 
 ## Conventions
 

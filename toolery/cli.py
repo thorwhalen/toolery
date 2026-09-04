@@ -1,6 +1,6 @@
-"""Command-line interface for toolery (argh dispatch).
+"""Command-line interface for toolery (``cw`` dispatch).
 
-Follows the argh SSOT pattern: functions in ``_dispatch_funcs`` become subcommands.
+Follows the SSOT pattern: functions in ``_dispatch_funcs`` become subcommands.
 """
 
 from __future__ import annotations
@@ -168,7 +168,16 @@ def serve(config=None, *, http=False, name="toolery"):
 _dispatch_funcs = [search, skills, agents, packages, discover, mine, index, serve]
 
 
-if __name__ == "__main__":
-    import argh
+def main():
+    """Dispatch the toolery CLI subcommands.
 
-    argh.dispatch_commands(_dispatch_funcs)
+    ``cw.dispatch`` *returns* the exit code (argh exited by itself), so the
+    ``SystemExit`` here is what makes ``toolery no-such-command`` exit 2.
+    """
+    import cw  # local: keeps ``import toolery.cli`` free of CLI machinery
+
+    raise SystemExit(cw.dispatch(_dispatch_funcs))
+
+
+if __name__ == "__main__":
+    main()
