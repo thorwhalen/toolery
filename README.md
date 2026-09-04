@@ -30,7 +30,7 @@ Or from Python — the simplest thing that works, with zero configuration:
 ```python
 import toolery
 
-cat = toolery.catalog("~/my/notes")        # harvest a folder of markdown
+cat = toolery.catalog("~/my/notes")  # harvest a folder of markdown
 for card, score in cat.search("parse pdf"):
     print(score, card.name, card.source_uri)
 ```
@@ -47,16 +47,16 @@ bare cards:
 import toolery
 
 cat = toolery.catalog(
-    toolery.skills("~/.claude/skills"),     # Claude Agent Skills (SKILL.md)
-    toolery.agents("~/.claude"),            # subagent specs (.claude/agents/*.md)
-    toolery.packages("~/my/projects"),      # Python packages (pyproject.toml)
-    toolery.mcp("~/my/project"),            # configured MCP servers (.mcp.json)
-    "~/my/notes",                           # a folder of docs
+    toolery.skills("~/.claude/skills"),  # Claude Agent Skills (SKILL.md)
+    toolery.agents("~/.claude"),  # subagent specs (.claude/agents/*.md)
+    toolery.packages("~/my/projects"),  # Python packages (pyproject.toml)
+    toolery.mcp("~/my/project"),  # configured MCP servers (.mcp.json)
+    "~/my/notes",  # a folder of docs
     [toolery.Card("grep", "tool", "grep", "search text with patterns")],
 )
 cat.search("find text in files")
 cat.by_kind("skill")
-cat.kinds                                   # {'skill': 42, 'agent': 9, 'package': 210, ...}
+cat.kinds  # {'skill': 42, 'agent': 9, 'package': 210, ...}
 ```
 
 Built-in harvesters: `folder`, `skills`, `agents`, `packages`, `mcp` — each just a
@@ -79,8 +79,10 @@ so you can start lexical and upgrade to embeddings without changing your calling
 ```python
 from toolery import Catalog, lexical_search, IrBackend
 
-cat = Catalog(cards, search_backend=lexical_search)   # zero-dependency default
-cat = Catalog(cards, search_backend=IrBackend())      # embeddings — pip install 'toolery[ir]'
+cat = Catalog(cards, search_backend=lexical_search)  # zero-dependency default
+cat = Catalog(
+    cards, search_backend=IrBackend()
+)  # embeddings — pip install 'toolery[ir]'
 ```
 
 `IrBackend` embeds each card and answers by vector similarity, rebuilding only when the
@@ -106,7 +108,9 @@ The CLI exposes it as `toolery discover "<query>" <root> --kinds skill,agent,doc
 ```python
 from toolery import contrib
 
-cat = contrib.everything(package_roots=["~/proj/mine"])   # + your ~/.claude skills & agents
+cat = contrib.everything(
+    package_roots=["~/proj/mine"]
+)  # + your ~/.claude skills & agents
 cat.search("thing I half-remember writing")
 ```
 

@@ -32,7 +32,8 @@ pip install 'toolery[mcp]'       # + MCP server
 **Search one folder / corpus**
 ```python
 import toolery
-cat = toolery.catalog("~/notes")            # or a list of toolery.Card(...)
+
+cat = toolery.catalog("~/notes")  # or a list of toolery.Card(...)
 for card, score in cat.search("parse a pdf"):
     print(score, card.kind, card.name, card.source_uri)
 ```

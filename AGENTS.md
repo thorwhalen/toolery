@@ -22,10 +22,12 @@ pip install 'toolery[mcp]'       # + MCP server exposure (py2mcp)
 
 ```python
 import toolery
-cat = toolery.catalog("~/notes")                 # harvest a folder of docs
-cat.search("dedup a csv")                        # -> ranked [(Card, score), ...]
 
-from toolery import contrib                       # your whole ecosystem, one call
+cat = toolery.catalog("~/notes")  # harvest a folder of docs
+cat.search("dedup a csv")  # -> ranked [(Card, score), ...]
+
+from toolery import contrib  # your whole ecosystem, one call
+
 contrib.everything(package_roots=["~/proj"]).search("embeddings")
 ```
 

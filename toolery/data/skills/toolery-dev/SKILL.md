@@ -32,8 +32,13 @@ subcommand in `cli.py` if useful (mirror `skills`), and add a tmp-dir test. Noth
 ```python
 def widgets(root, *, kind="widget"):
     for path in sorted(Path(root).expanduser().glob("**/*.widget")):
-        yield Card(id=str(path.name), kind=kind, name=path.stem,
-                   description=path.read_text(errors="ignore")[:200], source_uri=str(path))
+        yield Card(
+            id=str(path.name),
+            kind=kind,
+            name=path.stem,
+            description=path.read_text(errors="ignore")[:200],
+            source_uri=str(path),
+        )
 ```
 
 ## Add a search backend
