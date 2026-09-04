@@ -14,6 +14,7 @@ Two things it pins that no other test can see:
   make every argument error exit 0 -- invisible to every other test in the suite.
 """
 
+import os
 import subprocess
 import sys
 
@@ -35,13 +36,20 @@ COMMANDS = (
 )
 
 
+#: Pins that make recorded text reproducible. Merged ONTO ``os.environ``, never
+#: substituted for it: a replaced environment loses ``SYSTEMROOT`` on Windows and
+#: the child interpreter dies in ``_Py_HashRandomization_Init`` before it runs a
+#: line of our code.
+ENV_PINS = {"COLUMNS": "100", "PYTHONUTF8": "1", "PYTHONIOENCODING": "utf-8"}
+
+
 def run_cli(*argv):
     """Run ``python -m toolery`` in a subprocess and return the completed process."""
     return subprocess.run(
         [sys.executable, "-m", "toolery", *argv],
         capture_output=True,
         text=True,
-        env={"COLUMNS": "100", "PYTHONUTF8": "1", "PYTHONIOENCODING": "utf-8"},
+        env=dict(os.environ, **ENV_PINS),
         timeout=120,
     )
 
