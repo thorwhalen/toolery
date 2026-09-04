@@ -23,7 +23,7 @@ skill is the how-to for the common contributor tasks.
 `Catalog` (`catalog.py`) holds them and searches through a pluggable `search_backend`
 (`search.py`: `lexical_search`; `ir_backend.py`: `IrBackend`, `IrFederatedBackend`).
 `contrib.py` is ecosystem presets; `mcp_server.py` exposes search as an MCP tool; `cli.py` is
-argh dispatch.
+`cw` dispatch.
 
 ## Add a new asset kind (harvester)
 
@@ -49,7 +49,7 @@ only rebuilds when the cards change.
 `_require_py2mcp()`, which raise an actionable `pip install 'toolery[ir]'` error. Their tests
 `pytest.importorskip(...)` and use the hermetic `embedder="light"` (pure numpy, no network),
 so CI (which doesn't install the extras) **skips** them and stays green. Keep the core's only
-runtime dep = `argh`.
+runtime dep = `cw`.
 
 ## Test & lint
 
